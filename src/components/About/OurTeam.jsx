@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
-import team1 from "../../assets/team/sujal.png";
-import team2 from "../../assets/team/smeet.png";
-import team3 from "../../assets/team/parth.png";
+import team1 from "../../assets/team/sujal.webp";
+import team2 from "../../assets/team/smeet.webp";
+import team3 from "../../assets/team/parth.webp";
 
 const OurTeam = () => {
   return (
@@ -91,7 +91,7 @@ const OurTeam = () => {
                 whileHover={{ scale: 1.05 }}
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
               >
-                <img 
+                <img loading="lazy"  
                   src={member.image} 
                   alt={member.name} 
                   className="w-28 h-28 rounded-2xl object-cover mx-auto border-2 border-gray-700 group-hover:border-[#00FFAB]/50 transition-colors duration-300"

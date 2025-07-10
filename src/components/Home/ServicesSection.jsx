@@ -18,37 +18,61 @@ const services = [
 const ServicesSection = () => {
   return (
     <motion.div
-      className="min-h-screen flex flex-col justify-center px-6 md:px-20 max-w-7xl mx-auto"
+      className="min-h-screen flex flex-col justify-center px-6 md:px-20 max-w-8xl mx-auto"
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
     >
-      <div className="text-center mb-4">
-        <h2 className="text-4xl md:text-5xl font-bold text-white mb-2">
-          ONE PLATFORM FOR ALL YOUR
+      {/* Heading */}
+      <div className="text-center mb-4 mt-4 sm:mt-0">
+        <h2 className="text-3xl md:text-5xl font-bold text-white mb-3 sm:mb-4">
+          Our Services
         </h2>
-        <h2 className="text-4xl md:text-5xl font-bold text-[#00FFAB]">
-          ENGAGEMENT NEEDS
-        </h2>
-        <div className="w-24 h-1 bg-[#00FFAB] mx-auto mt-4 rounded-full" />
+        <div
+            className="w-36 h-1 bg-gradient-to-r from-transparent via-[#00FFAB] to-transparent mx-auto mb-2 "
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ delay: 0.3, duration: 1 }}
+          />
+          <p className="text-xl text-white font-medium max-w-5xl mx-auto relative">
+          Transforming workplaces through engaging experiences that build stronger teams
+        </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Grid - Mobile: 2 columns, 3 rows | Laptop: 3 columns responsive */}
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-6">
         {services.map((service, idx) => (
           <motion.div
             key={idx}
-            className="bg-black rounded-3xl overflow-hidden cursor-pointer group shadow-xl h-[180px]"
+            className="bg-black rounded-3xl overflow-hidden cursor-pointer group shadow-xl h-[140px] sm:h-[190px]"
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.3 }}
             onClick={() => (window.location.href = "/services")}
           >
             <div className="relative w-full h-full">
               <img
+                loading="lazy"
                 src={service.image}
                 alt={service.title}
                 className="object-cover w-full h-full"
               />
-              <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center">
+
+              {/* Mobile: Always show title */}
+              <div className="absolute inset-0 bg-black/70 flex items-center justify-center sm:hidden">
+                <h3 className="text-white text-base font-bold text-center px-2 leading-tight">
+                  {service.title}
+                </h3>
+              </div>
+
+              {/* Tablet: Always show title */}
+              <div className="absolute inset-0 bg-black/70  items-center justify-center hidden sm:flex md:hidden">
+                <h3 className="text-white text-xl font-bold text-center px-2">
+                  {service.title}
+                </h3>
+              </div>
+
+              {/* Laptop: Show title on hover */}
+              <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-all items-center justify-center hidden md:flex">
                 <h3 className="text-white text-xl font-bold text-center px-2">
                   {service.title}
                 </h3>
@@ -58,6 +82,7 @@ const ServicesSection = () => {
         ))}
       </div>
 
+      {/* Button */}
       <div className="text-center mt-4">
         <motion.button
           whileHover={{ scale: 1.05 }}

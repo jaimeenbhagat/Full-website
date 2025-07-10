@@ -1,4 +1,4 @@
-import herosectionImage from '../../assets/about.png';
+import herosectionImage from '../../assets/about.webp';
 
 export const blogs = [
   {
