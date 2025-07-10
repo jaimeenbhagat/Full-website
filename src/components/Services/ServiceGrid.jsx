@@ -67,90 +67,94 @@ const ServiceGrid = ({ services, serviceCategories, onServiceClick }) => {
 
             {/* Services Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {categoryServices.map((service) => (
-                <div
-                  key={service.id}
-                  className="bg-[#00FFAB] rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-2xl group relative overflow-hidden border border-gray-700 hover:border-[#00FFAB]"
-                  onClick={() => onServiceClick(service)}
-                >
-                  {/* Background Pattern */}
-                  <div className="absolute inset-0 opacity-5">
-                    <div className="absolute top-0 right-0 w-20 h-20 bg-gray-800 rounded-full -translate-y-10 translate-x-10"></div>
-                    <div className="absolute bottom-0 left-0 w-16 h-16 bg-gray-800 rounded-full translate-y-8 -translate-x-8"></div>
+              {categoryServices.map((service, index) => {
+                const isGreen = index % 2 === 0;
+                
+                return (
+                  <div
+                    key={service.id}
+                    className={`${isGreen ? 'bg-[#00FFAB]' : 'bg-gray-900'} rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-2xl group relative overflow-hidden border ${isGreen ? 'border-gray-700 hover:border-[#00FFAB]' : 'border-gray-700 hover:border-gray-600'}`}
+                    onClick={() => onServiceClick(service)}
+                  >
+                    {/* Background Pattern */}
+                    <div className="absolute inset-0 opacity-5">
+                      <div className={`absolute top-0 right-0 w-20 h-20 ${isGreen ? 'bg-gray-800' : 'bg-gray-700'} rounded-full -translate-y-10 translate-x-10`}></div>
+                      <div className={`absolute bottom-0 left-0 w-16 h-16 ${isGreen ? 'bg-gray-800' : 'bg-gray-700'} rounded-full translate-y-8 -translate-x-8`}></div>
+                    </div>
+
+                    {/* Content */}
+                    <div className="relative z-10">
+                      {/* Header */}
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="text-4xl">{categoryData.icon}</div>
+                        <div className="flex items-center gap-2">
+                          <div className={`w-2 h-2 rounded-full ${getDifficultyDot(service.difficulty)}`}></div>
+                          <span className={`text-xs font-medium ${getDifficultyColor(service.difficulty)}`}>
+                            {service.difficulty}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Title & Subtitle */}
+                      <h3 className={`text-xl font-semibold mb-2 ${isGreen ? 'text-gray-800' : 'text-white'} transition-colors`}>
+                        {service.title}
+                      </h3>
+                      <p className={`text-sm mb-4 ${isGreen ? 'text-gray-700' : 'text-gray-300'} line-clamp-2`}>
+                        {service.subtitle}
+                      </p>
+
+                      {/* Service Details */}
+                      <div className="space-y-2 mb-4">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs">⏱️</span>
+                          <span className={`text-xs ${isGreen ? 'text-gray-600' : 'text-gray-400'}`}>
+                            {service.duration}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs">👥</span>
+                          <span className={`text-xs ${isGreen ? 'text-gray-600' : 'text-gray-400'}`}>
+                            {service.participants} people
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs">📍</span>
+                          <span className={`text-xs ${isGreen ? 'text-gray-600' : 'text-gray-400'}`}>
+                            {service.location}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Skills Tags */}
+                      <div className="flex flex-wrap gap-1 mb-4">
+                        {service.skills.slice(0, 2).map((skill, skillIndex) => (
+                          <span
+                            key={skillIndex}
+                            className={`text-xs px-2 py-1 ${isGreen ? 'bg-gray-800 bg-opacity-20 text-gray-700 border border-gray-700 border-opacity-30' : 'bg-gray-800 bg-opacity-20 text-[#00FFAB] border border-[#00FFAB] border-opacity-30'} rounded-full`}
+                          >
+                            {skill}
+                          </span>
+                        ))}
+                        {service.skills.length > 2 && (
+                          <span className={`text-xs px-2 py-1 ${isGreen ? 'bg-gray-800 bg-opacity-20 text-gray-700 border border-gray-700 border-opacity-30' : 'bg-gray-800 bg-opacity-20 text-[#00FFAB] border border-[#00FFAB] border-opacity-30'} rounded-full`}>
+                            +{service.skills.length - 2}
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Bottom */}
+                      <div className="flex justify-between items-center">
+                        <span className={`text-xs font-medium ${isGreen ? 'text-gray-600' : 'text-gray-400'}`}>
+                          {service.pricing}
+                        </span>
+                        <div className={`w-8 h-8 ${isGreen ? 'bg-gray-800' : 'bg-gray-700'} rounded-full flex items-center justify-center shadow-sm group-hover:opacity-80 transition-all duration-300 group-hover:scale-110`}>
+                          <span className={`${isGreen ? 'text-[#00FFAB]' : 'text-[#00FFAB]'} text-sm font-bold`}>→</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-
-                  {/* Content */}
-                  <div className="relative z-10">
-                    {/* Header */}
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="text-4xl">{categoryData.icon}</div>
-                      <div className="flex items-center gap-2">
-                        <div className={`w-2 h-2 rounded-full ${getDifficultyDot(service.difficulty)}`}></div>
-                        <span className={`text-xs font-medium ${getDifficultyColor(service.difficulty)}`}>
-                          {service.difficulty}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Title & Subtitle */}
-                    <h3 className="text-xl font-semibold mb-2 text-gray-800 transition-colors">
-                      {service.title}
-                    </h3>
-                    <p className="text-sm mb-4 text-white line-clamp-2">
-                      {service.subtitle}
-                    </p>
-
-                    {/* Service Details */}
-                    <div className="space-y-2 mb-4">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs">⏱️</span>
-                        <span className="text-xs text-gray-400">
-                          {service.duration}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs">👥</span>
-                        <span className="text-xs text-gray-400">
-                          {service.participants} people
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs">📍</span>
-                        <span className="text-xs text-gray-400">
-                          {service.location}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Skills Tags */}
-                    <div className="flex flex-wrap gap-1 mb-4">
-                      {service.skills.slice(0, 2).map((skill, index) => (
-                        <span
-                          key={index}
-                          className="text-xs px-2 py-1 bg-gray-800 bg-opacity-20 rounded-full text-[#00FFAB] border border-[#00FFAB] border-opacity-30"
-                        >
-                          {skill}
-                        </span>
-                      ))}
-                      {service.skills.length > 2 && (
-                        <span className="text-xs px-2 py-1 bg-gray-800 bg-opacity-20 rounded-full text-[#00FFAB] border border-[#00FFAB] border-opacity-30">
-                          +{service.skills.length - 2}
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Bottom */}
-                    <div className="flex justify-between items-center">
-                      <span className="text-xs font-medium text-gray-400">
-                        {service.pricing}
-                      </span>
-                      <div className="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center shadow-sm group-hover:opacity-80 transition-all duration-300 group-hover:scale-110">
-                        <span className="text-[#00FFAB] text-sm font-bold">→</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         );
