@@ -153,7 +153,7 @@ const ServiceGrid = ({ services, serviceCategories, onServiceClick }) => {
                           {service.pricing}
                         </span>
                         <div className="w-7 h-7 sm:w-8 sm:h-8 bg-[#00FFAB] bg-opacity-20 border border-[#00FFAB] border-opacity-30 rounded-full flex items-center justify-center group-hover:bg-opacity-30 group-hover:border-opacity-50 transition-all duration-300 group-hover:scale-110 flex-shrink-0">
-                          <span className="text-[#00FFAB] text-sm font-bold">→</span>
+                          <span className="text-black text-sm font-bold">→</span>
                         </div>
                       </div>
                     </div>
