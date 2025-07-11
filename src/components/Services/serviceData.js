@@ -201,7 +201,7 @@ export const servicesData = {
             },
             {
                 "id": "chair-desk-yoga",
-                "title": "Chair/Desk Yoga",
+                "title": "Chair-Desk Yoga",
                 "subtitle": "A stress-relieving session without leaving your seat",
                 "category": "wellness",
                 "description": "Designed for office settings, this practice uses basic stretches and breathing techniques to open up stiff muscles and realign posture. No need to roll out a mat; relief is one seat away.",

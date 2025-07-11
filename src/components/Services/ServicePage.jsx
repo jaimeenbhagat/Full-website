@@ -5,14 +5,53 @@ const ServicePage = ({ service, onClose }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
 
-  // Placeholder images - you can replace these with actual image paths from your JSON
-  const placeholderImages = [
-    "/api/placeholder/800/600",
-    "/api/placeholder/800/600", 
-    "/api/placeholder/800/600"
-  ];
+  // Generate image paths based on category and title
+  const generateImagePaths = () => {
+    if (!service.category || !service.title) {
+      // Fallback to placeholder if category or title is missing
+      console.log('Missing category or title:', { category: service.category, title: service.title });
+      return [
+        "/api/placeholder/800/600",
+        "/api/placeholder/800/600", 
+        "/api/placeholder/800/600"
+      ];
+    }
+    
+    // Category should be lowercase with hyphens (as per your folder structure)
+    const normalizedCategory = service.category.toLowerCase().replace(/\s+/g, '-');
+    
+    // Title should keep original capitalization and spaces (as per your folder structure)
+    const titleForPath = service.title;
+    
+    const basePath = `/assets/activities/${normalizedCategory}/${titleForPath}`;
+    
+    const imagePaths = [
+      `${basePath}/1.webp`,
+      `${basePath}/2.webp`,
+      `${basePath}/3.webp`
+    ];
+    
+    // Debug: Log the generated paths
+    console.log('Generated image paths:', {
+      category: service.category,
+      title: service.title,
+      normalizedCategory,
+      titleForPath,
+      basePath,
+      imagePaths
+    });
+    
+    return imagePaths;
+  };
 
-  const images = service.images || placeholderImages;
+  const images = service.images || generateImagePaths();
+
+  // Add image error handling
+  const handleImageError = (e, imagePath) => {
+    console.error('Image failed to load:', imagePath);
+    console.log('Trying to load:', e.target.src);
+    e.target.src = '/api/placeholder/800/600'; // Fallback to placeholder
+  };
 
   const getDifficultyColor = (difficulty) => {
     switch (difficulty.toLowerCase()) {
@@ -96,8 +135,10 @@ const ServicePage = ({ service, onClose }) => {
                       alt={`${service.title} - Image ${index + 1}`}
                       className="w-full h-48 sm:h-56 lg:h-64 object-cover rounded-xl border border-gray-700 cursor-pointer hover:border-[#00FFAB] transition-all duration-300 transform hover:scale-105"
                       onClick={() => openImageModal(index)}
+                      onError={(e) => handleImageError(e, image)}
+                      onLoad={() => console.log('Image loaded successfully:', image)}
                     />
-                    <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-20 transition-all duration-300 rounded-xl"></div>
+                    {/* Debug: Show image path */}
                   </div>
                 ))}
               </div>
