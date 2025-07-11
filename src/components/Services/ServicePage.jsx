@@ -132,6 +132,7 @@ const ServicePage = ({ service, onClose }) => {
                   <div key={index} className="relative group">
                     <img
                       src={image}
+                      loading="lazy"
                       alt={`${service.title} - Image ${index + 1}`}
                       className="w-full h-48 sm:h-56 lg:h-64 object-cover rounded-xl border border-gray-700 cursor-pointer hover:border-[#00FFAB] transition-all duration-300 transform hover:scale-105"
                       onClick={() => openImageModal(index)}
