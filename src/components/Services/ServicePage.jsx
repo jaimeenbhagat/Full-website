@@ -91,7 +91,7 @@ const ServicePage = ({ service, onClose }) => {
   return (
     <>
       <div className="fixed inset-0 bg-black bg-opacity-90 flex items-start justify-center p-2 sm:p-4 z-50 overflow-y-auto backdrop-blur-sm">
-        <div className="bg-gray-900 text-white rounded-xl sm:rounded-2xl max-w-4xl w-full my-2 sm:my-8 relative border border-gray-700 shadow-2xl">
+        <div className="bg-black text-white rounded-xl sm:rounded-2xl max-w-4xl w-full my-2 sm:my-8 relative border border-gray-700 shadow-2xl">
           {/* Close button */}
           <button
             onClick={onClose}

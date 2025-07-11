@@ -71,7 +71,7 @@ const ServiceGrid = ({ services, serviceCategories, onServiceClick }) => {
                 return (
                   <div
                     key={service.id}
-                    className="bg-gray-900 rounded-xl sm:rounded-2xl p-4 sm:p-6 cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-2xl group relative overflow-hidden border border-gray-700 hover:border-[#00FFAB]/50 h-full flex flex-col"
+                    className="bg-black rounded-xl sm:rounded-2xl p-4 sm:p-6 cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-2xl group relative overflow-hidden border border-gray-700 hover:border-[#00FFAB]/50 h-full flex flex-col"
                     onClick={() => onServiceClick(service)}
                   >
                     {/* Consistent Background Pattern */}
