@@ -126,7 +126,7 @@ export const servicesData = {
             },
             {
                 "id": "stationery-sprint",
-                "title": "Stationery Sprint",
+                "title": "Stationary Sprint",
                 "subtitle": "Slow and steady wins the race!",
                 "category": "office-olympics",
                 "description": "Dash across the room while juggling office supplies. Drop it, and you start over. Test your coordination and speed in this game of steady hands and quick feet.",
