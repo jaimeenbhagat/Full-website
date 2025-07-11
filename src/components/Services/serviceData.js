@@ -605,21 +605,6 @@ export const servicesData = {
                     "requirements": ["Open Space", "Blindfolds", "Markers", "Clear Commands"]
                 },
                 {
-                    "id": "cricket-auction",
-                    "title": "Cricket Auction",
-                    "subtitle": "Build your dream IPL team with strategy and budgeting",
-                    "category": "team-building",
-                    "description": "A mock auction where teams manage budgets and strategize to build their dream IPL team. It's not just about cricket knowledge; it's about resource allocation, negotiation under pressure, and balancing stars with strategy.",
-                    "duration": "120 minutes",
-                    "participants": "4-6",
-                    "difficulty": "Medium",
-                    "location": "Indoor",
-                    "skills": ["Budgeting", "Decision Making", "Roleplay", "Analysis"],
-                    "pricing": "Group Pricing",
-                    "includes": ["Player Cards", "Budget Sheets", "Auction Hammer", "Scoreboard"],
-                    "requirements": ["Tables", "Chairs", "Projector", "Auction Materials"]
-                },
-                {
                     "id": "paper-tower-build",
                     "title": "Paper Tower Build",
                     "subtitle": "Build the tallest freestanding tower with paper and tape",
