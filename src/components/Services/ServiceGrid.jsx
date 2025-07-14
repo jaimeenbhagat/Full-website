@@ -26,10 +26,21 @@ const ServiceGrid = ({ services, serviceCategories, onServiceClick }) => {
     }
   };
 
+  const getServiceImage = (service) => {
+    const normalizedCategory = service.category.toLowerCase().replace(/\s+/g, '-');
+    const titleForPath = service.title;
+    const basePath = `/assets/activities/${normalizedCategory}/${titleForPath}`;
+    return `${basePath}/1.webp`;
+  };
+
   if (services.length === 0) {
     return (
       <div className="text-center py-16">
-        <div className="text-6xl mb-4">🔍</div>
+        <div className="w-16 h-16 mx-auto mb-4 bg-gray-800 rounded-full flex items-center justify-center">
+          <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
         <h3 className="text-2xl font-bold mb-2 text-gray-400">No experiences found</h3>
         <p className="text-gray-500">Try adjusting your filters to see more results</p>
       </div>
@@ -55,8 +66,10 @@ const ServiceGrid = ({ services, serviceCategories, onServiceClick }) => {
           <div key={categoryId} className="space-y-6">
             {/* Category Header */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
-              <div className="bg-gradient-to-r from-[#00FFAB] to-green-400 p-2 sm:p-3 rounded-xl">
-                <span className="text-xl sm:text-2xl">{categoryData.icon}</span>
+              <div className="bg-gradient-to-r from-[#00FFAB] to-green-400 p-3 rounded-xl">
+                <div className="w-6 h-6 bg-black rounded flex items-center justify-center">
+                  <div className="w-3 h-3 bg-[#00FFAB] rounded-sm"></div>
+                </div>
               </div>
               <div className="flex-1 min-w-0">
                 <h2 className="text-2xl sm:text-3xl font-bold text-white truncate">{categoryData.name}</h2>
@@ -65,96 +78,101 @@ const ServiceGrid = ({ services, serviceCategories, onServiceClick }) => {
               <div className="hidden sm:block flex-1 h-px bg-gradient-to-r from-[#00FFAB] to-transparent"></div>
             </div>
 
-            {/* Services Grid - Uniform Dark Theme Cards */}
+            {/* Services Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
               {categoryServices.map((service) => {
                 return (
                   <div
                     key={service.id}
-                    className="bg-black rounded-xl sm:rounded-2xl p-4 sm:p-6 cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-2xl group relative overflow-hidden border border-gray-700 hover:border-[#00FFAB]/50 h-full flex flex-col"
+                    className="bg-black rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-2xl group relative border border-gray-800 hover:border-[#00FFAB]/50"
                     onClick={() => onServiceClick(service)}
                   >
-                    {/* Consistent Background Pattern */}
-                    <div className="absolute inset-0 opacity-5">
-                      <div className="absolute top-0 right-0 w-20 h-20 bg-[#00FFAB] rounded-full -translate-y-10 translate-x-10"></div>
-                      <div className="absolute bottom-0 left-0 w-16 h-16 bg-[#00FFAB] rounded-full translate-y-8 -translate-x-8"></div>
-                    </div>
-
-                    {/* Consistent Hover Glow Effect */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#00FFAB]/5 via-transparent to-[#00FFAB]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
-                    {/* Content - Consistent Layout */}
-                    <div className="relative z-10 flex flex-col h-full">
-                      {/* Header - Fixed Height */}
-                      <div className="flex items-start justify-between mb-3 sm:mb-4 h-12">
-                        <div className="text-2xl sm:text-3xl lg:text-4xl flex items-center justify-center w-12 h-12">
-                          {categoryData.icon}
+                    {/* Service Image */}
+                    <div className="relative h-60 bg-gray-900 overflow-hidden">
+                      <img 
+                        src={getServiceImage(service)} 
+                        alt={service.title}
+                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          e.target.nextSibling.style.display = 'flex';
+                        }}
+                      />
+                      {/* Fallback when image fails to load */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900 hidden items-center justify-center">
+                        <div className="w-16 h-16 bg-[#00FFAB] bg-opacity-20 rounded-full flex items-center justify-center">
+                          <div className="w-8 h-8 bg-[#00FFAB] rounded-sm"></div>
                         </div>
-                        <div className="flex items-center gap-1 sm:gap-2">
-                          <div className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full ${getDifficultyDot(service.difficulty)}`}></div>
+                      </div>
+                      
+                      {/* Tags Overlay - Only Hybrid if applicable */}
+                      <div className="absolute top-3 left-3 flex gap-2">
+                        {service.location.includes('Hybrid') && (
+                          <span className="px-2 py-1 bg-black bg-opacity-70 text-[#00FFAB] text-xs font-medium rounded-full border border-[#00FFAB] border-opacity-30">
+                            Hybrid
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Difficulty Indicator (replacing heart icon) */}
+                      <div className="absolute top-2 right-2">
+                        <div className="bg-black bg-opacity-80 rounded-full px-2.5 py-1.5 flex items-center gap-1.5 shadow-lg">
+                          <div className={`w-2 h-2 rounded-full ${getDifficultyDot(service.difficulty)}`}></div>
                           <span className={`text-xs font-medium ${getDifficultyColor(service.difficulty)}`}>
                             {service.difficulty}
                           </span>
                         </div>
                       </div>
 
-                      {/* Title & Subtitle - Fixed Height */}
-                      <div className="mb-3 sm:mb-4 h-20 flex flex-col justify-start">
-                        <h3 className="text-lg sm:text-xl font-semibold mb-2 text-white group-hover:text-[#00FFAB] transition-colors duration-300 line-clamp-2 leading-tight">
+                      {/* Gradient Overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
+                    </div>
+
+                    {/* Card Content */}
+                    <div className="p-3 space-y-2">
+                      {/* Title (replacing pricing) */}
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-white font-bold text-lg leading-tight line-clamp-2 group-hover:text-[#00FFAB] transition-colors duration-300">
                           {service.title}
                         </h3>
-                        <p className="text-sm text-gray-300 line-clamp-2 leading-tight">
-                          {service.subtitle}
-                        </p>
                       </div>
 
-                      {/* Service Details - Fixed Height */}
-                      <div className="space-y-2 mb-4 h-16">
+                      {/* Description */}
+                      <p className="text-gray-400 text-sm line-clamp-2 leading-relaxed">
+                        {service.subtitle}
+                      </p>
+
+                      {/* Service Details */}
+                      <div className="space-y-2 text-sm text-gray-400">
                         <div className="flex items-center gap-2">
-                          <span className="text-xs text-[#00FFAB] w-3">⏱️</span>
-                          <span className="text-xs text-gray-400 truncate">
-                            {service.duration}
-                          </span>
+                          <svg className="w-4 h-4 text-[#00FFAB]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          <span>{service.duration}</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className="text-xs text-[#00FFAB] w-3">👥</span>
-                          <span className="text-xs text-gray-400 truncate">
-                            {service.participants} people
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs text-[#00FFAB] w-3">📍</span>
-                          <span className="text-xs text-gray-400 truncate">
-                            {service.location}
-                          </span>
+                          <svg className="w-4 h-4 text-[#00FFAB]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+                          </svg>
+                          <span>{service.participants} people</span>
                         </div>
                       </div>
 
-                      {/* Skills Tags - Fixed Height */}
-                      <div className="flex flex-wrap gap-1 mb-3 sm:mb-4 h-8 overflow-hidden">
+                      {/* Skills Tags */}
+                      <div className="flex flex-wrap gap-1 pt-1">
                         {service.skills.slice(0, 2).map((skill, skillIndex) => (
                           <span
                             key={skillIndex}
-                            className="text-xs px-2 py-1 bg-gray-800 bg-opacity-60 text-[#00FFAB] border border-[#00FFAB] border-opacity-30 rounded-full hover:bg-opacity-80 transition-all duration-200 truncate max-w-[120px] h-6 flex items-center"
+                            className="text-xs px-2 py-1 bg-gray-800 bg-opacity-60 text-[#00FFAB] border border-[#00FFAB] border-opacity-30 rounded-full hover:bg-opacity-80 transition-all duration-200"
                           >
                             {skill}
                           </span>
                         ))}
                         {service.skills.length > 2 && (
-                          <span className="text-xs px-2 py-1 bg-gray-800 bg-opacity-60 text-[#00FFAB] border border-[#00FFAB] border-opacity-30 rounded-full hover:bg-opacity-80 transition-all duration-200 h-6 flex items-center">
+                          <span className="text-xs px-2 py-1 bg-gray-800 bg-opacity-60 text-[#00FFAB] border border-[#00FFAB] border-opacity-30 rounded-full hover:bg-opacity-80 transition-all duration-200">
                             +{service.skills.length - 2}
                           </span>
                         )}
-                      </div>
-
-                      {/* Bottom - Fixed at Bottom */}
-                      <div className="flex justify-between items-center mt-auto">
-                        <span className="text-xs font-medium text-gray-400 group-hover:text-gray-300 transition-colors duration-200 truncate max-w-[60%]">
-                          {service.pricing}
-                        </span>
-                        <div className="w-7 h-7 sm:w-8 sm:h-8 bg-[#00FFAB] bg-opacity-20 border border-[#00FFAB] border-opacity-30 rounded-full flex items-center justify-center group-hover:bg-opacity-30 group-hover:border-opacity-50 transition-all duration-300 group-hover:scale-110 flex-shrink-0">
-                          <span className="text-black text-sm font-bold">→</span>
-                        </div>
                       </div>
                     </div>
                   </div>
