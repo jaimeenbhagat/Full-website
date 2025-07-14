@@ -84,11 +84,11 @@ const ServiceGrid = ({ services, serviceCategories, onServiceClick }) => {
                 return (
                   <div
                     key={service.id}
-                    className="bg-black rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-2xl group relative border border-gray-800 hover:border-[#00FFAB]/50"
+                    className="bg-black rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-2xl group relative border border-gray-800 hover:border-[#00FFAB]/50 h-[400px] w-full flex flex-col"
                     onClick={() => onServiceClick(service)}
                   >
-                    {/* Service Image */}
-                    <div className="relative h-60 bg-gray-900 overflow-hidden">
+                    {/* Service Image - Fixed Height */}
+                    <div className="relative h-48 bg-gray-900 overflow-hidden flex-shrink-0">
                       <img 
                         src={getServiceImage(service)} 
                         alt={service.title}
@@ -137,42 +137,46 @@ const ServiceGrid = ({ services, serviceCategories, onServiceClick }) => {
                         </h3>
                       </div>
 
-                      {/* Description */}
-                      <p className="text-gray-400 text-sm line-clamp-2 leading-relaxed">
-                        {service.subtitle}
-                      </p>
+                      {/* Description - Fixed Height */}
+                      <div className="h-10 mb-4">
+                        <p className="text-gray-400 text-sm line-clamp-2 leading-relaxed">
+                          {service.subtitle}
+                        </p>
+                      </div>
 
-                      {/* Service Details */}
-                      <div className="space-y-2 text-sm text-gray-400">
+                      {/* Service Details - Fixed Height */}
+                      <div className="h-12 mb-4 flex flex-col justify-center space-y-1 text-sm text-gray-400">
                         <div className="flex items-center gap-2">
-                          <svg className="w-4 h-4 text-[#00FFAB]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-4 h-4 text-[#00FFAB] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                           </svg>
-                          <span>{service.duration}</span>
+                          <span className="truncate">{service.duration}</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <svg className="w-4 h-4 text-[#00FFAB]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-4 h-4 text-[#00FFAB] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
                           </svg>
-                          <span>{service.participants} people</span>
+                          <span className="truncate">{service.participants} people</span>
                         </div>
                       </div>
 
-                      {/* Skills Tags */}
-                      <div className="flex flex-wrap gap-1 pt-1">
-                        {service.skills.slice(0, 2).map((skill, skillIndex) => (
-                          <span
-                            key={skillIndex}
-                            className="text-xs px-2 py-1 bg-gray-800 bg-opacity-60 text-[#00FFAB] border border-[#00FFAB] border-opacity-30 rounded-full hover:bg-opacity-80 transition-all duration-200"
-                          >
-                            {skill}
-                          </span>
-                        ))}
-                        {service.skills.length > 2 && (
-                          <span className="text-xs px-2 py-1 bg-gray-800 bg-opacity-60 text-[#00FFAB] border border-[#00FFAB] border-opacity-30 rounded-full hover:bg-opacity-80 transition-all duration-200">
-                            +{service.skills.length - 2}
-                          </span>
-                        )}
+                      {/* Skills Tags - Fixed Height and Flex-End */}
+                      <div className="flex-1 flex items-end">
+                        <div className="w-full h-8 flex flex-wrap gap-1 content-start">
+                          {service.skills.slice(0, 2).map((skill, skillIndex) => (
+                            <span
+                              key={skillIndex}
+                              className="text-xs px-2 py-1 bg-gray-800 bg-opacity-60 text-[#00FFAB] border border-[#00FFAB] border-opacity-30 rounded-full hover:bg-opacity-80 transition-all duration-200 truncate max-w-20"
+                            >
+                              {skill}
+                            </span>
+                          ))}
+                          {service.skills.length > 2 && (
+                            <span className="text-xs px-2 py-1 bg-gray-800 bg-opacity-60 text-[#00FFAB] border border-[#00FFAB] border-opacity-30 rounded-full hover:bg-opacity-80 transition-all duration-200 flex-shrink-0">
+                              +{service.skills.length - 2}
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
