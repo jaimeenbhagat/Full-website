@@ -90,8 +90,8 @@ const ServicePage = ({ service, onClose }) => {
 
   return (
     <>
-      <div className="fixed inset-0 bg-black bg-opacity-90 flex items-start justify-center p-2 sm:p-4 z-50 overflow-y-auto backdrop-blur-sm">
-        <div className="bg-black text-white rounded-xl sm:rounded-2xl max-w-4xl w-full my-2 sm:my-8 relative border border-gray-700 shadow-2xl">
+      <div className="fixed inset-0  bg-opacity-50 flex items-start justify-center p-2 sm:p-4 z-50 overflow-y-auto backdrop-blur-sm">
+        <div className=" bg-black/50 text-white rounded-xl sm:rounded-2xl max-w-6xl w-full my-2 sm:my-8 relative border border-black shadow-2xl ">
           {/* Close button */}
           <button
             onClick={onClose}
@@ -115,7 +115,7 @@ const ServicePage = ({ service, onClose }) => {
                     {getDifficultyIcon(service.difficulty)} {service.difficulty}
                   </span>
                 </div>
-                <p className="text-gray-300 mb-3 text-sm sm:text-base">{service.subtitle}</p>
+                <p className="text-white mb-3 text-sm sm:text-base">{service.subtitle}</p>
               </div>
             </div>
 
