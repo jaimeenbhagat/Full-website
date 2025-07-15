@@ -1,9 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 
 const ServicePage = ({ service, onClose }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    // Save original body overflow
+    const originalStyle = window.getComputedStyle(document.body).overflow;
+    
+    // Lock body scroll
+    document.body.style.overflow = 'hidden';
+    
+    // Cleanup: restore original overflow when component unmounts
+    return () => {
+      document.body.style.overflow = originalStyle;
+    };
+  }, []);
 
   // Generate image paths based on category and title
   const generateImagePaths = () => {
@@ -88,20 +102,33 @@ const ServicePage = ({ service, onClose }) => {
     setIsImageModalOpen(false);
   };
 
+  const handleClose = () => {
+    // Restore body scroll before closing
+    document.body.style.overflow = 'auto';
+    onClose();
+  };
+
+  // Prevent background scroll when clicking on modal backdrop
+  const handleBackdropClick = (e) => {
+    if (e.target === e.currentTarget) {
+      handleClose();
+    }
+  };
+
   return (
     <>
-      <div className="fixed inset-0  bg-opacity-50 flex items-start justify-center p-2 sm:p-4 z-50 overflow-y-auto backdrop-blur-sm">
-        <div className=" bg-black/50 text-white rounded-xl sm:rounded-2xl max-w-6xl w-full my-2 sm:my-8 relative border border-black shadow-2xl ">
+      <div className="fixed inset-0  bg-opacity-50 flex items-start justify-center p-2 sm:p-4 z-50 backdrop-blur-sm">
+        <div className=" bg-black/50 text-white rounded-xl sm:rounded-2xl max-w-6xl w-full  relative border border-black shadow-2xl ">
           {/* Close button */}
           <button
-            onClick={onClose}
+            onClick={handleClose}
             className="absolute top-2 right-2 sm:top-4 sm:right-4 w-8 h-8 bg-black border border-gray-600 rounded-full flex items-center justify-center hover:bg-gray-900 hover:border-[#00FFAB] transition-all duration-200 z-10"
           >
             <X size={16} className="text-gray-300 hover:text-[#00FFAB]" />
           </button>
 
-          {/* Content */}
-          <div className="p-4 sm:p-6 lg:p-8 max-h-[90vh] sm:max-h-[80vh] overflow-y-auto">
+          {/* Content - This is the only scrollable area */}
+          <div className="p-4 sm:p-6 lg:p-8 overflow-y-auto max-h-[95vh]">
             {/* Header */}
             <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4 mb-6 pr-8 sm:pr-0">
               <div className="bg-gradient-to-br from-[#00FFAB] to-green-400 p-2 sm:p-3 rounded-xl flex-shrink-0">
@@ -111,7 +138,6 @@ const ServicePage = ({ service, onClose }) => {
                 <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-2">
                   <h2 className="text-xl sm:text-2xl font-bold text-white">{service.title}</h2>
                   <span className={`px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium border ${getDifficultyColor(service.difficulty)} self-start`}>
-          
                     {getDifficultyIcon(service.difficulty)} {service.difficulty}
                   </span>
                 </div>
@@ -232,7 +258,7 @@ const ServicePage = ({ service, onClose }) => {
               </button>
               <button
                 className="bg-black border border-gray-600 text-gray-300 font-semibold px-6 sm:px-8 py-3 rounded-lg hover:bg-gray-900 hover:border-[#00FFAB] hover:text-white transition-all duration-300 transform hover:scale-105 text-sm sm:text-base"
-                onClick={onClose}
+                onClick={handleClose}
               >
                 Browse More
               </button>
