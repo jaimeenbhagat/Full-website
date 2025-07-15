@@ -45,16 +45,6 @@ const ServicePage = ({ service, onClose }) => {
       `${basePath}/3.webp`
     ];
     
-    // Debug: Log the generated paths
-    console.log('Generated image paths:', {
-      category: service.category,
-      title: service.title,
-      normalizedCategory,
-      titleForPath,
-      basePath,
-      imagePaths
-    });
-    
     return imagePaths;
   };
 
@@ -62,8 +52,6 @@ const ServicePage = ({ service, onClose }) => {
 
   // Add image error handling
   const handleImageError = (e, imagePath) => {
-    console.error('Image failed to load:', imagePath);
-    console.log('Trying to load:', e.target.src);
     e.target.src = '/api/placeholder/800/600'; // Fallback to placeholder
   };
 
@@ -161,7 +149,6 @@ const ServicePage = ({ service, onClose }) => {
                       className="w-full h-48 sm:h-56 lg:h-64 object-cover rounded-xl border border-gray-700 cursor-pointer hover:border-[#00FFAB] transition-all duration-300 transform hover:scale-105"
                       onClick={() => openImageModal(index)}
                       onError={(e) => handleImageError(e, image)}
-                      onLoad={() => console.log('Image loaded successfully:', image)}
                     />
                   </div>
                 ))}
