@@ -70,7 +70,7 @@ function Navbar() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
                         transition={{ duration: 0.2 }}
-                        className="absolute top-full left-0 mt-2 w-48 text-center bg-black/90 backdrop-blur-lg rounded-lg shadow-lg border border-gray-800 py-2"
+                        className="absolute top-full left-[-3] mt-2 w-48 text-center backdrop-blur-md bg-black/40 z-50 rounded-lg shadow-lg border border-white/20 py-2"
                       >
                         {dropdown.map((item) => (
                           <button
@@ -117,7 +117,7 @@ function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.3 }}
-            className="md:hidden backdrop-blur-xs px-6 pt-4 pb-8 space-y-4 flex flex-col"
+            className="md:hidden backdrop-blur-md bg-black/20 px-6 pt-4 pb-8 space-y-4 flex flex-col"
           >
             {navItems.map(({ name, path, dropdown }) => (
               <div key={name}>
