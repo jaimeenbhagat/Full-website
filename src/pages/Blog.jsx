@@ -57,7 +57,13 @@ const Blog = () => {
         <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-white">
           Our Latest Blogs
         </h2>
-        <p className="text-white text-lg max-w-2xl mx-auto">
+        <div
+            className="w-72 h-1 bg-gradient-to-r from-transparent via-[#00FFAB] to-transparent mx-auto mb-2 "
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ delay: 0.3, duration: 1 }}
+          />
+        <p className="text-white text-lg max-w-5xl mx-auto">
           Discover insights, trends, and expert perspectives on employee engagement, 
           workplace culture, and organizational growth.
         </p>
