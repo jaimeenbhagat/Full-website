@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
+import { CheckCircle, AlertCircle } from "lucide-react";
 
 // Custom Card components
 const Card = ({ children, className = "" }) => (
@@ -107,6 +108,11 @@ export default function EngagementCalculatorForm() {
   const [emailError, setEmailError] = useState("");
   const [phoneError, setPhoneError] = useState("");
 
+  // Form submission states (copied from contact.jsx)
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null); // 'success', 'error', null
+  const [validationErrors, setValidationErrors] = useState({});
+
   // Calculated ROI data state
   const [roiData, setRoiData] = useState({
     totalTurnoverCost: 0,
@@ -121,6 +127,16 @@ export default function EngagementCalculatorForm() {
 
   // Data for the Pie Chart
   const [pieData, setPieData] = useState([]);
+
+  // Clear status messages after 5 seconds (copied from contact.jsx)
+  useEffect(() => {
+    if (submitStatus) {
+      const timer = setTimeout(() => {
+        setSubmitStatus(null);
+      }, 3001);
+      return () => clearTimeout(timer);
+    }
+  }, [submitStatus]);
 
   // Core Calculation Logic Function
   const calculateRoiData = () => {
@@ -190,32 +206,123 @@ export default function EngagementCalculatorForm() {
     }
   };
 
-  // Handler for contact form submission
-  const handleContactSubmit = () => {
-    let valid = true;
-    setEmailError("");
-    setPhoneError("");
+  // API URL function (copied from contact.jsx)
+  const getApiUrl = () => {
+    if (import.meta.env.MODE === 'production') {
+      return import.meta.env.VITE_API_URL || 'https://onethrive-backend.onrender.com';
+    } else {
+      return import.meta.env.VITE_API_URL || 'http://localhost:3001';
+    }
+  };
+  
+
+  // Validation function for contact form
+  const validateContactForm = () => {
+    const errors = {};
 
     // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      setEmailError("Please enter a valid email address.");
-      valid = false;
+    if (!email.trim()) {
+      errors.email = "Email is required";
+    } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+      errors.email = "Please enter a valid email address";
     }
 
     // Phone number validation
-    const phoneRegex = /^[0-9]{10,15}$/;
-    if (!phoneRegex.test(phoneNumber)) {
-      setPhoneError("Please enter a valid phone number (10-15 digits).");
-      valid = false;
+    if (!phoneNumber.trim()) {
+      errors.phoneNumber = "Phone number is required";
+    } else if (!/^[0-9]{10,15}$/.test(phoneNumber.replace(/\s+/g, ''))) {
+      errors.phoneNumber = "Please enter a valid phone number (10-15 digits)";
     }
 
-    if (valid) {
-      console.log("Contact Info Submitted:", { email, phoneNumber });
-      setShowContactModal(false);
-      setShowResults(true);
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  // Handler for contact form submission (updated with backend integration)
+  const handleContactSubmit = async () => {
+    if (!validateContactForm()) {
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+
+    try {
+      // Prepare form data including all calculator inputs and calculated results
+      const formData = {
+        email,
+        phoneNumber,
+        numEmployees,
+        avgAnnualSalary,
+        employeesWhoLeft,
+        engagementScore: engagementScore[0],
+        annualRevenue,
+        avgExtraAbsenteeismDaysPerEmployee,
+        calculatedResults: roiData
+      };
+
+      console.log("Submitting ROI calculator data:", formData);
+
+      // Get API URL based on environment
+      const API_URL = getApiUrl();
+      console.log("Using API URL:", API_URL);
+      
+      const response = await fetch(`${API_URL}/api/roi-calculator`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      console.log("Response status:", response.status);
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log("Server response:", result);
+
+        setSubmitStatus("success");
+        setShowContactModal(false);
+        setShowResults(true);
+        setValidationErrors({});
+      } else {
+        const errorData = await response.json().catch(() => ({}));
+        console.error("Server returned error:", response.status, errorData);
+        setSubmitStatus("error");
+      }
+    } catch (error) {
+      console.error("Error submitting ROI calculator form:", error);
+      setSubmitStatus("error");
+    } finally {
+      setIsSubmitting(false);
     }
   };
+
+  // Clear validation errors when user starts typing
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+    if (validationErrors.email) {
+      setValidationErrors(prev => ({
+        ...prev,
+        email: null
+      }));
+    }
+  };
+
+  const handlePhoneChange = (e) => {
+    setPhoneNumber(e.target.value);
+    if (validationErrors.phoneNumber) {
+      setValidationErrors(prev => ({
+        ...prev,
+        phoneNumber: null
+      }));
+    }
+  };
+
+  const inputClasses = (fieldName) => `
+    w-full p-3 bg-black bg-opacity-40 text-white border rounded-lg focus:ring-2 focus:ring-[#00FFAB] outline-none
+    ${validationErrors[fieldName] ? 'border-red-500 focus:border-red-500 focus:ring-red-400' : 'border-gray-800'}
+  `;
 
   return (
     <div className="max-w-7xl mx-auto">
@@ -225,6 +332,25 @@ export default function EngagementCalculatorForm() {
           <Card className="bg-black border-gray-800 rounded-3xl p-10 shadow-xl text-center max-w-2xl w-full">
             <CardContent className="space-y-8">
               <h2 className="text-3xl font-bold text-[#00FFAB] mb-6">Input Your Details</h2>
+              
+              {/* Status Messages */}
+              {submitStatus === "success" && (
+                <div className="bg-green-900/20 border border-[#00FFAB] rounded-lg p-4 flex items-center gap-3 animate-fade-in">
+                  <CheckCircle className="text-[#00FFAB] w-5 h-5" />
+                  <span className="text-[#00FFAB]">
+                    ROI calculation submitted successfully! We'll get back to you soon.
+                  </span>
+                </div>
+              )}
+
+              {submitStatus === "error" && (
+                <div className="bg-red-900/20 border border-red-400 rounded-lg p-4 flex items-center gap-3 animate-fade-in">
+                  <AlertCircle className="text-red-400 w-5 h-5" />
+                  <span className="text-red-400">
+                    Failed to submit ROI calculation. Please try again or contact us directly.
+                  </span>
+                </div>
+              )}
               
               {/* Input Fields */}
               <div>
@@ -390,6 +516,8 @@ export default function EngagementCalculatorForm() {
                   setShowResults(false);
                   setEmail('');
                   setPhoneNumber('');
+                  setSubmitStatus(null);
+                  setValidationErrors({});
                 }}
               >
                 Recalculate
@@ -482,84 +610,101 @@ export default function EngagementCalculatorForm() {
           <div className="bg-black p-8 rounded-xl max-w-md w-full">
             <h3 className="text-2xl font-bold text-[#00FFAB] mb-6">Contact Information</h3>
             
-            <div className="space-y-4">
-              <div>
-                <label className="block text-white mb-2">Email Address</label>
-                <input
-                  type="email"
-                  className="w-full p-3 bg-black bg-opacity-40 text-white border border-gray-800 rounded-lg focus:ring-2 focus:ring-[#00FFAB] outline-none"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="your.email@company.com"
-                />
-                {emailError && <p className="text-red-500 text-sm mt-1">{emailError}</p>}
+            {/* Status Messages in Modal */}
+            {submitStatus === "success" && (
+              <div className="bg-green-900/20 border border-[#00FFAB] rounded-lg p-4 flex items-center gap-3 animate-fade-in mb-4">
+                <CheckCircle className="text-[#00FFAB] w-5 h-5" />
+                <span className="text-[#00FFAB]">
+                  ROI calculation submitted successfully!
+                </span>
               </div>
-              
-              <div>
-                <label className="block text-white mb-2">Phone Number</label>
-                <input
-                  type="tel"
-                  className="w-full p-3 bg-black bg-opacity-40 text-white border border-gray-800 rounded-lg focus:ring-2 focus:ring-[#00FFAB] outline-none"
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                  placeholder="9876543210"
-                />
-                {phoneError && <p className="text-red-500 text-sm mt-1">{phoneError}</p>}
+            )}
+
+            {submitStatus === "error" && (
+              <div className="bg-red-900/20 border border-red-400 rounded-lg p-4 flex items-center gap-3 animate-fade-in mb-4">
+                <AlertCircle className="text-red-400 w-5 h-5" />
+                <span className="text-red-400">
+                  Failed to submit. Please try again.
+                </span>
               </div>
-            </div>
+            )}
             
-            <div className="flex space-x-4 mt-6">
-              <button
-                className="flex-1 bg-[#00FFAB] text-black py-3 rounded-lg font-bold hover:bg-[#00E69B] transition-colors"
-                onClick={handleContactSubmit}
-              >
-                Get Results
-              </button>
-              <button
-                className="flex-1 bg-gray-700 text-white py-3 rounded-lg font-bold hover:bg-gray-600 transition-colors"
-                onClick={() => setShowContactModal(false)}
-              >
-                Cancel
-              </button>
+            <div>
+              <div className="space-y-4">
+                <div>
+                  <label htmlFor="email" className="block text-white font-bold mb-2">
+                    Email Address *
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    value={email}
+                    onChange={handleEmailChange}
+                    placeholder="your@email.com"
+                    required
+                    className={inputClasses('email')}
+                  />
+                  {validationErrors.email && (
+                    <p className="text-red-400 text-sm mt-1">{validationErrors.email}</p>
+                  )}
+                </div>
+
+                <div>
+                  <label htmlFor="phoneNumber" className="block text-white font-bold mb-2">
+                    Phone Number *
+                  </label>
+                  <input
+                    type="tel"
+                    id="phoneNumber"
+                    value={phoneNumber}
+                    onChange={handlePhoneChange}
+                    placeholder="+91 98765 43210"
+                    required
+                    className={inputClasses('phoneNumber')}
+                  />
+                  {validationErrors.phoneNumber && (
+                    <p className="text-red-400 text-sm mt-1">{validationErrors.phoneNumber}</p>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex gap-4 mt-6">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowContactModal(false);
+                    setEmail('');
+                    setPhoneNumber('');
+                    setValidationErrors({});
+                    setSubmitStatus(null);
+                  }}
+                  className="flex-1 bg-gray-700 text-white py-3 rounded-lg font-bold transition-all duration-300 hover:bg-gray-600"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleContactSubmit}
+                  disabled={isSubmitting}
+                  className="flex-1 bg-gradient-to-r from-[#00FFAB] to-[#00E69B] text-black py-3 rounded-lg font-bold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isSubmitting ? "Submitting..." : "Get Results"}
+                </button>
+              </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* OneThrive CTA Section */}
-      {showResults && (
-        <section className="max-w-4xl mx-auto mt-28">
-          <div className="text-center mb-8">
-            <p className="text-xl md:text-2xl font-medium text-white leading-relaxed max-w-3xl mx-auto">
-              The numbers speak for themselves. Now, let's turn insights into action.
-              <strong className="font-bold"> OneThrive is here to help you bridge the gap between potential savings and real-world results.</strong>
-            </p>
-          </div>
-          
-          <div className="bg-black border-gray-800 rounded-3xl p-10 shadow-xl text-center">
-            <h3 className="text-3xl font-bold text-[#00FFAB] mb-6">
-              Partner with OneThrive: Elevate Your Workforce & Culture
-            </h3>
-            <p className="text-lg text-white font-medium mb-8 leading-relaxed">
-              OneThrive offers comprehensive solutions designed to significantly boost employee engagement, reduce turnover, and foster a thriving team culture. Let us help you achieve measurable improvements in productivity, revenue, and overall organizational health.
-            </p>
-            <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-              <button
-                className="bg-gradient-to-r from-[#00FFAB] to-[#00E69B] text-black py-5 px-10 rounded-xl font-bold text-2xl tracking-wide uppercase transition-all duration-300 transform hover:scale-105 active:scale-95"
-                onClick={() => window.open("https://www.onethrive.com", "_blank")}
-              >
-                Explore Our Solutions
-              </button>
-              <button
-                className="bg-gradient-to-r from-[#00E69B] to-[#00FFAB] text-black py-5 px-10 rounded-xl font-bold text-2xl tracking-wide uppercase transition-all duration-300 transform hover:scale-105 active:scale-95"
-                onClick={() => window.open("https://www.onethrive.com/contact", "_blank")}
-              >
-                Partner with OneThrive
-              </button>
-            </div>
-          </div>
-        </section>
-      )}
+      <style jsx>{`
+        @keyframes fade-in {
+          from { opacity: 0; transform: translateY(-10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+          animation: fade-in 0.3s ease-out; 
+        }
+      `}</style>
     </div>
   );
 }
