@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { CheckCircle, AlertCircle } from "lucide-react";
 import { quizData } from "../components/CultureQuiz/quizData";
 import { getCultureLevel } from "../components/CultureQuiz/getCultureLevel";
 
@@ -12,12 +13,27 @@ const CultureQuiz = () => {
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [userEmail, setUserEmail] = useState("");
 
+  // Backend integration state (copied from ROI calculator)
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null); // 'success', 'error', null
+  const [validationErrors, setValidationErrors] = useState({});
+
   const totalQuestions = quizData.length;
   const allQuestionsAnswered = answeredCount === totalQuestions;
 
   // Refs for scrolling to questions
   const questionRefs = useRef({});
   const quizContentRef = useRef(null);
+
+  // Clear status messages after 5 seconds (copied from ROI calculator)
+  useEffect(() => {
+    if (submitStatus) {
+      const timer = setTimeout(() => {
+        setSubmitStatus(null);
+      }, 3001);
+      return () => clearTimeout(timer);
+    }
+  }, [submitStatus]);
 
   // Calculate total score and answered count whenever answers change
   useEffect(() => {
@@ -91,11 +107,137 @@ const CultureQuiz = () => {
     }));
   };
 
-  // Function to handle quiz submission
-  const handleSubmitQuiz = () => {
-    setShowQuiz(false);
-    setShowResults(true);
-    window.scrollTo(0, 0);
+  // API URL function (copied from ROI calculator)
+  const getApiUrl = () => {
+    if (import.meta.env.MODE === 'production') {
+      return import.meta.env.VITE_API_URL || 'https://onethrive-backend.onrender.com';
+    } else {
+      return import.meta.env.VITE_API_URL || 'http://localhost:3001';
+    }
+  };
+
+  // Validation function for email (copied from ROI calculator)
+  const validateEmail = () => {
+    const errors = {};
+
+    // Email validation
+    if (!userEmail.trim()) {
+      errors.email = "Email is required";
+    } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(userEmail)) {
+      errors.email = "Please enter a valid email address";
+    }
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  // Handle email input submission with backend integration (updated from ROI calculator)
+  const handleEmailSubmit = async () => {
+    if (!validateEmail()) {
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+
+    try {
+      // Prepare form data for culture quiz
+      const formData = {
+        email: userEmail,
+        quizType: 'culture_quiz',
+        timestamp: new Date().toISOString()
+      };
+
+      console.log("Submitting culture quiz email:", formData);
+
+      // Get API URL based on environment
+      const API_URL = getApiUrl();
+      console.log("Using API URL:", API_URL);
+      
+      const response = await fetch(`${API_URL}/api/culture-quiz-email`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      console.log("Response status:", response.status);
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log("Server response:", result);
+
+        setSubmitStatus("success");
+        setShowEmailModal(false);
+        setShowQuiz(true);
+        setValidationErrors({});
+      } else {
+        const errorData = await response.json().catch(() => ({}));
+        console.error("Server returned error:", response.status, errorData);
+        setSubmitStatus("error");
+      }
+    } catch (error) {
+      console.error("Error submitting culture quiz email:", error);
+      setSubmitStatus("error");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Function to handle quiz submission with backend integration (updated from ROI calculator)
+  const handleSubmitQuiz = async () => {
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+
+    try {
+      const cultureResult = getCultureLevel(totalScore);
+      
+      // Prepare quiz results data
+      const quizResultsData = {
+        email: userEmail,
+        totalScore: totalScore,
+        totalQuestions: totalQuestions,
+        maxPossibleScore: totalQuestions * 14,
+        answeredCount: answeredCount,
+        answers: answers,
+        cultureResult: cultureResult,
+        completedAt: new Date().toISOString()
+      };
+
+      console.log("Submitting culture quiz results:", quizResultsData);
+
+      // Get API URL based on environment
+      const API_URL = getApiUrl();
+      
+      const response = await fetch(`${API_URL}/api/culture-quiz-results`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(quizResultsData),
+      });
+
+      console.log("Quiz results response status:", response.status);
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log("Quiz results server response:", result);
+        setSubmitStatus("success");
+      } else {
+        const errorData = await response.json().catch(() => ({}));
+        console.error("Server returned error:", response.status, errorData);
+        setSubmitStatus("error");
+      }
+    } catch (error) {
+      console.error("Error submitting culture quiz results:", error);
+      setSubmitStatus("error");
+    } finally {
+      setIsSubmitting(false);
+      setShowQuiz(false);
+      setShowResults(true);
+      window.scrollTo(0, 0);
+    }
   };
 
   // Function to restart the quiz
@@ -107,6 +249,9 @@ const CultureQuiz = () => {
     setShowQuiz(false);
     setShowEmailModal(false);
     setUserEmail("");
+    setSubmitStatus(null);
+    setValidationErrors({});
+    setIsSubmitting(false);
     window.scrollTo(0, 0);
   };
 
@@ -166,16 +311,21 @@ const CultureQuiz = () => {
     }, 3000);
   };
 
-  // Handle email input submission
-  const handleEmailSubmit = () => {
-    if (userEmail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userEmail)) {
-      console.log("User Email Collected:", userEmail);
-      setShowEmailModal(false);
-      setShowQuiz(true);
-    } else {
-      showToast("Please enter a valid email address.", "error");
+  // Clear validation errors when user starts typing
+  const handleEmailChange = (e) => {
+    setUserEmail(e.target.value);
+    if (validationErrors.email) {
+      setValidationErrors(prev => ({
+        ...prev,
+        email: null
+      }));
     }
   };
+
+  const inputClasses = (fieldName) => `
+    w-full p-3 rounded-lg bg-zinc-800 border text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00FFAB] transition-colors
+    ${validationErrors[fieldName] ? 'border-red-500 focus:border-red-500 focus:ring-red-400' : 'border-zinc-700 focus:border-[#00FFAB]'}
+  `;
 
   return (
     <div className="min-h-screen flex mt-14 items-center justify-center p-4 sm:p-8 relative overflow-hidden">
@@ -194,6 +344,26 @@ const CultureQuiz = () => {
               positive transformation and helps build an even more thriving
               environment for everyone.
             </p>
+
+            {/* Status Messages */}
+            {submitStatus === "success" && (
+              <div className="bg-green-900/20 border border-[#00FFAB] rounded-lg p-4 flex items-center gap-3 animate-fade-in mb-6">
+                <CheckCircle className="text-[#00FFAB] w-5 h-5" />
+                <span className="text-[#00FFAB]">
+                  Email submitted successfully! Starting your quiz...
+                </span>
+              </div>
+            )}
+
+            {submitStatus === "error" && (
+              <div className="bg-red-900/20 border border-red-400 rounded-lg p-4 flex items-center gap-3 animate-fade-in mb-6">
+                <AlertCircle className="text-red-400 w-5 h-5" />
+                <span className="text-red-400">
+                  Failed to submit email. Please try again or contact us directly.
+                </span>
+              </div>
+            )}
+
             <button
               onClick={() => setShowEmailModal(true)}
               className="bg-[#00FFAB] text-black font-bold py-3 px-10 rounded-full text-lg hover:bg-[#00FFAB] hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-[#00FFAB]/50"
@@ -286,14 +456,14 @@ const CultureQuiz = () => {
                 <button
                   id="submit-quiz-button"
                   onClick={handleSubmitQuiz}
-                  disabled={!allQuestionsAnswered}
+                  disabled={!allQuestionsAnswered || isSubmitting}
                   className={`font-bold py-4 px-12 rounded-full text-xl transition-all duration-300 ease-in-out shadow-lg ${
-                    !allQuestionsAnswered
+                    !allQuestionsAnswered || isSubmitting
                       ? "bg-zinc-700 text-white cursor-not-allowed"
                       : "bg-[#00FFAB] hover:bg-[#00FFAB] text-black transform hover:-translate-y-1 hover:shadow-xl hover:shadow-[#00FFAB]/50"
                   }`}
                 >
-                  Reveal My Culture Persona!
+                  {isSubmitting ? "Submitting..." : "Reveal My Culture Persona!"}
                 </button>
               </div>
             </div>
@@ -309,6 +479,25 @@ const CultureQuiz = () => {
             <p className="text-6xl md:text-7xl font-bold text-[#00FFAB] mb-6 leading-tight">
               {cultureResult.level}
             </p>
+
+            {/* Status Messages in Results */}
+            {submitStatus === "success" && (
+              <div className="bg-green-900/20 border border-[#00FFAB] rounded-lg p-4 flex items-center gap-3 animate-fade-in mb-6">
+                <CheckCircle className="text-[#00FFAB] w-5 h-5" />
+                <span className="text-[#00FFAB]">
+                  Quiz results submitted successfully! Thank you for participating.
+                </span>
+              </div>
+            )}
+
+            {submitStatus === "error" && (
+              <div className="bg-red-900/20 border border-red-400 rounded-lg p-4 flex items-center gap-3 animate-fade-in mb-6">
+                <AlertCircle className="text-red-400 w-5 h-5" />
+                <span className="text-red-400">
+                  Failed to submit quiz results. Your results are still valid!
+                </span>
+              </div>
+            )}
 
             {/* Score Display */}
             <div className="mb-6 mx-auto w-48 h-48 relative">
@@ -375,12 +564,16 @@ const CultureQuiz = () => {
         )}
       </div>
 
-      {/* Email Collection Modal */}
+      {/* Email Collection Modal with Backend Integration */}
       {showEmailModal && (
-        <div className="fixed inset-0  bg-opacity-70 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
+        <div className="fixed inset-0 bg-opacity-70 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
           <div className="bg-black p-8 rounded-2xl shadow-2xl border border-zinc-700 text-center max-w-md w-full relative">
             <button
-              onClick={() => setShowEmailModal(false)}
+              onClick={() => {
+                setShowEmailModal(false);
+                setValidationErrors({});
+                setSubmitStatus(null);
+              }}
               className="absolute top-4 right-4 text-white hover:text-[#00FFAB] transition-colors"
             >
               <svg
@@ -403,19 +596,43 @@ const CultureQuiz = () => {
             <p className="text-gray-300 mb-6">
               Enter your email to get started and receive exclusive insights.
             </p>
+
+            {/* Status Messages in Modal */}
+            {submitStatus === "success" && (
+              <div className="bg-green-900/20 border border-[#00FFAB] rounded-lg p-4 flex items-center gap-3 animate-fade-in mb-4">
+                <CheckCircle className="text-[#00FFAB] w-5 h-5" />
+                <span className="text-[#00FFAB]">
+                  Email submitted successfully!
+                </span>
+              </div>
+            )}
+
+            {submitStatus === "error" && (
+              <div className="bg-red-900/20 border border-red-400 rounded-lg p-4 flex items-center gap-3 animate-fade-in mb-4">
+                <AlertCircle className="text-red-400 w-5 h-5" />
+                <span className="text-red-400">
+                  Failed to submit. Please try again.
+                </span>
+              </div>
+            )}
+
             <input
               type="email"
               placeholder="your.email@example.com"
-              className="w-full p-3 rounded-lg bg-zinc-800 border border-zinc-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00FFAB] focus:border-[#00FFAB] mb-6 transition-colors"
+              className={inputClasses('email')}
               value={userEmail}
-              onChange={(e) => setUserEmail(e.target.value)}
+              onChange={handleEmailChange}
               onKeyPress={(e) => e.key === 'Enter' && handleEmailSubmit()}
             />
+            {validationErrors.email && (
+              <p className="text-red-400 text-sm mt-1 text-left">{validationErrors.email}</p>
+            )}
             <button
               onClick={handleEmailSubmit}
-              className="bg-[#00FFAB] text-black font-bold py-3 px-8 rounded-full text-lg w-full hover:bg-[#00FFAB] transition-colors"
+              disabled={isSubmitting}
+              className="bg-[#00FFAB] text-black font-bold py-3 px-8 rounded-full text-lg w-full hover:bg-[#00FFAB] transition-colors mt-6 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Start Quiz
+              {isSubmitting ? "Submitting..." : "Start Quiz"}
             </button>
           </div>
         </div>
