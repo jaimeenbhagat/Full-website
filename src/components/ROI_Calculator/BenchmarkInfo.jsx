@@ -15,55 +15,92 @@ const CardContent = ({ children, className = "" }) => (
 
 const BenchmarkInfo = () => {
   return (
-    <section className="max-w-4xl mx-auto mt-28 bg-black border-gray-800 rounded-3xl p-10 shadow-xl">
-      <Card className="bg-black border-gray-800">
-        <CardContent>
-          <h3 className="text-2xl font-bold text-[#00FFAB] mb-5">Our Approach & Key Benchmarks</h3>
-          <div className="text-gray-300 space-y-3 text-base">
-            <li className="flex items-start">
-              <span className="mr-3 text-xl text-gray-400">⚡</span>
-              <span>Uses your company's data for accurate cost estimates.</span>
-            </li>
-            <li className="flex items-start">
-              <span className="mr-3 text-xl text-gray-400">📊</span>
-              <span>
-                Calculates costs for <strong className="font-bold">employee disengagement</strong> and <strong className="font-bold">turnover</strong>.
-              </span>
-            </li>
-            <li className="flex items-start">
-              <span className="mr-3 text-xl text-gray-400">💰</span>
-              <span><strong className="font-bold">Find clear savings</strong> by boosting team engagement.</span>
-            </li>
-            <li className="mt-4">
-              <div className="mb-2">
-                <span className="text-gray-400 font-bold">How We Calculate Your ROI:</span>
+    <div className="min-h-screen bg-black p-8 flex items-center justify-center">
+      <div className="max-w-4xl mx-auto">
+        <Card className="bg-black border-gray-800 border-2">
+          <CardContent className="p-10">
+            <h3 className="text-3xl font-bold text-[#00FFAB] mb-8">Our Approach & Key Benchmarks</h3>
+            
+            {/* Main Features */}
+            <div className="space-y-6 mb-8">
+              <div className="flex items-start space-x-4">
+                <div className="text-yellow-400 text-2xl">⚡</div>
+                <p className="text-white text-lg">Uses your company's data for accurate cost estimates.</p>
               </div>
-              <ul className="list-disc list-inside ml-6 mt-2 space-y-1 text-sm">
-                <li>
-                  <strong className="font-bold">Disengagement Cost:</strong> Estimated from lost productivity and extra absenteeism days.
+              
+              <div className="flex items-start space-x-4">
+                <div className="text-blue-400 text-2xl">📊</div>
+                <p className="text-white text-lg">
+                  Calculates costs for <span className="font-bold text-white">employee disengagement</span> and <span className="font-bold text-white">turnover</span>.
+                </p>
+              </div>
+              
+              <div className="flex items-start space-x-4">
+                <div className="text-yellow-400 text-2xl">💰</div>
+                <p className="text-white text-lg">
+                  <span className="font-bold text-white">Find clear savings</span> by boosting team engagement.
+                </p>
+              </div>
+            </div>
+
+            {/* ROI Calculation Section */}
+            <div className="mb-8">
+              <h4 className="text-xl font-bold text-white mb-4">How We Calculate Your ROI:</h4>
+              <ul className="space-y-3 ml-6">
+                <li className="flex items-start">
+                  <span className="w-2 h-2 bg-[#00FFAB] rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                  <span className="text-white">
+                    <span className="font-bold">Disengagement Cost:</span> Estimated from lost productivity and extra absenteeism days.
+                  </span>
                 </li>
-                <li>
-                  <strong className="font-bold">Turnover Cost:</strong> Calculated by multiplying employees who left by replacement cost.
+                <li className="flex items-start">
+                  <span className="w-2 h-2 bg-[#00FFAB] rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                  <span className="text-white">
+                    <span className="font-bold">Turnover Cost:</span> Calculated by multiplying employees who left by replacement cost.
+                  </span>
                 </li>
-                <li>
-                  <strong className="font-bold">Potential Revenue Increase:</strong> Projected based on improved engagement impact.
+                <li className="flex items-start">
+                  <span className="w-2 h-2 bg-[#00FFAB] rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                  <span className="text-white">
+                    <span className="font-bold">Potential Revenue Increase:</span> Projected based on improved engagement impact.
+                  </span>
                 </li>
               </ul>
-            </li>
-            <li className="mt-4">
-              <div className="mb-2">
-                <span className="text-gray-400 font-bold">Industry Benchmarks Used:</span>
-              </div>
-              <ul className="list-disc list-inside ml-6 mt-2 space-y-1 text-sm">
-                <li>Productivity loss from disengaged employees: <strong className="font-bold">34% of annual salary.</strong></li>
-                <li>Average cost to replace an employee: <strong className="font-bold">125% of annual salary.</strong></li>
-                <li>Highly engaged companies see <strong className="font-bold">2-5% higher annual revenue growth</strong>.</li>
+            </div>
+
+            {/* Industry Benchmarks Section */}
+            <div>
+              <h4 className="text-xl font-bold text-white mb-4">Industry Benchmarks Used:</h4>
+              <ul className="space-y-3 ml-6">
+                <li className="flex items-start">
+                  <span className="w-2 h-2 bg-[#00FFAB] rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                  <span className="text-white">
+                    Productivity loss from disengaged employees: <span className="font-bold text-[#00FFAB]">34% of annual salary</span>.
+                  </span>
+                </li>
+                <li className="flex items-start">
+                  <span className="w-2 h-2 bg-[#00FFAB] rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                  <span className="text-white">
+                    Average cost to replace an employee: <span className="font-bold text-[#00FFAB]">125% of annual salary</span>.
+                  </span>
+                </li>
+                <li className="flex items-start">
+                  <span className="w-2 h-2 bg-[#00FFAB] rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                  <span className="text-white">
+                    Highly engaged companies see <span className="font-bold text-[#00FFAB]">2-5% higher annual revenue growth</span>.
+                  </span>
+                </li>
               </ul>
-            </li>
-          </div>
-        </CardContent>
-      </Card>
-    </section>
+            </div>
+
+            {/* Decorative element matching the original */}
+            <div className="absolute right-8 bottom-8">
+              <div className="w-3 h-3 bg-[#00FFAB] rounded-full"></div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
   );
 };
 

@@ -29,7 +29,7 @@ const Slider = ({ defaultValue, max, step, onValueChange, className = "", ...pro
     <div className={`relative ${className}`}>
       <input
         type="range"
-        min="1"
+        min="0"
         max={max}
         step={step}
         value={value}
@@ -464,7 +464,7 @@ export default function EngagementCalculatorForm() {
               </div>
 
               <button
-                className={`w-full bg-gradient-to-r from-[#00FFAB] to-[#00E69B] text-black py-3 rounded-xl font-bold text-2xl tracking-wide uppercase mt-10 transition-all duration-300 transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-[#00FFAB] ${
+                className={`w-full bg-[#00FFAB] text-black py-3 rounded-xl font-bold text-2xl tracking-wide uppercase mt-10 transition-all duration-300 transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-[#00FFAB] ${
                   turnoverInputError ? "opacity-40 cursor-not-allowed" : ""
                 }`}
                 onClick={handleCalculateButtonClick}
