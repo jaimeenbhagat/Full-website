@@ -172,7 +172,7 @@ const CultureQuiz = () => {
       console.log("Using API URL:", API_URL);
       
       // SINGLE API CALL to the correct endpoint
-      const response = await fetch(`${API_URL}/api/culture-quiz`, {
+      const response = await fetch(`${API_URL}/api/culture-quiz-results`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
