@@ -93,10 +93,6 @@ const BenchmarkInfo = () => {
               </ul>
             </div>
 
-            {/* Decorative element matching the original */}
-            <div className="absolute right-8 bottom-8">
-              <div className="w-3 h-3 bg-[#00FFAB] rounded-full"></div>
-            </div>
           </CardContent>
         </Card>
       </div>
