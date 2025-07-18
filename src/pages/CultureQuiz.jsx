@@ -160,7 +160,7 @@ const CultureQuiz = () => {
         maxPossibleScore: totalQuestions * 14,
         answeredCount: answeredCount,
         answers: answers,
-        cultureResult: cultureResult,
+        cultureLevel: cultureResult, // Corrected key name
         completedAt: new Date().toISOString(),
         submittedAt: new Date().toISOString()
       };
