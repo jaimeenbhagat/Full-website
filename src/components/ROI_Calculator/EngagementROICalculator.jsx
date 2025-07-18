@@ -511,7 +511,7 @@ export default function EngagementCalculatorForm() {
               </div>
 
               <button
-                className="w-full bg-gradient-to-r from-gray-600 to-gray-700 text-white py-4 rounded-xl font-bold text-xl transition-all duration-300 transform hover:scale-105"
+                className="w-full bg-[#00FFAB] text-black uppercase py-4 rounded-xl font-bold text-xl transition-all duration-300 transform hover:scale-105"
                 onClick={() => {
                   setShowResults(false);
                   setEmail('');
@@ -538,17 +538,17 @@ export default function EngagementCalculatorForm() {
                 
                 <div className="flex justify-between items-center py-3">
                   <span className="text-white font-bold text-lg">Annual Cost of Turnover:</span>
-                  <span className="text-red-600 font-bold text-xl">{formatINR(roiData.totalTurnoverCost)}</span>
+                  <span className="text-red-500 font-bold text-xl">{formatINR(roiData.totalTurnoverCost)}</span>
                 </div>
                 
                 <div className="flex justify-between items-center py-3 border-t border-gray-700 pt-6">
-                  <span className="text-white font-bold text-xl">Total Hidden Cost:</span>
-                  <span className="text-red-600 font-bold text-2xl">{formatINR(roiData.totalHiddenLoss)}</span>
+                  <span className="text-white font-bold text-lg">Total Hidden Cost:</span>
+                  <span className="text-red-500 font-bold text-xl">{formatINR(roiData.totalHiddenLoss)}</span>
                 </div>
                 
                 <div className="flex justify-between items-center py-3">
                   <span className="text-white font-bold text-lg">Potential Annual Revenue Boost:</span>
-                  <span className="text-[#00FFAB] font-bold text-lg">
+                  <span className="text-[#00FFAB] font-bold text-md">
                     {formatINR(roiData.potentialRevenueIncreaseMin)}–{formatINR(roiData.potentialRevenueIncreaseMax)}
                   </span>
                 </div>
@@ -560,7 +560,7 @@ export default function EngagementCalculatorForm() {
                       by improving engagement by just 1-2 points
                     </span>
                   </div>
-                  <span className="text-[#00FFAB] font-bold text-lg">
+                  <span className="text-[#00FFAB] font-bold text-md">
                     {formatINR(roiData.potentialSavingsMin)}–{formatINR(roiData.potentialSavingsMax)}
                   </span>
                 </div>
@@ -569,7 +569,7 @@ export default function EngagementCalculatorForm() {
               {/* Pie Chart */}
               <div className="mt-8">
                 <h3 className="text-xl font-bold text-white mb-4 text-center">Cost Breakdown</h3>
-                <ResponsiveContainer width="100%" height={280}>
+                <ResponsiveContainer width="100%" height={300}>
                   <PieChart>
                     <Pie
                       data={pieData}
@@ -581,6 +581,7 @@ export default function EngagementCalculatorForm() {
                       label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
                       labelLine={false}
                       animationDuration={1000}
+                      className="mr-32"
                     >
                       {pieData.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -589,7 +590,7 @@ export default function EngagementCalculatorForm() {
                     <Tooltip
                       formatter={(val) => formatINR(Math.round(val))}
                       contentStyle={{
-                        backgroundColor: "#1A1A1A",
+                        backgroundColor: "#00FFAB",
                         border: "1px solid #00FFAB",
                         color: "#00FFAB",
                         borderRadius: "15px",
