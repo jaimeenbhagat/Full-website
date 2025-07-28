@@ -1,6 +1,8 @@
 import React from 'react';
 import EngagementROICalculator from '../components/ROI_Calculator/EngagementROICalculator';
 import BenchmarkInfo from '../components/ROI_Calculator/BenchmarkInfo';
+import { CheckCircle, AlertCircle, Calculator, TrendingUp, Users, DollarSign } from "lucide-react";
+
 
 const ROICalculator = () => {
   return (
@@ -17,9 +19,34 @@ const ROICalculator = () => {
             animate={{ scaleX: 1 }}
             transition={{ delay: 0.3, duration: 1 }}
           />
-          <p className="text-white text-lg max-w-xl mx-auto mt-4">
-            Discover the hidden costs of disengagement and unlock your organization's true potential
+          <p className="text-white text-lg font-medium max-w-4xl mx-auto mt-4">
+          Discover the hidden costs of employee disengagement and unlock your organization's true potential. <br />
+          Our advanced calculator reveals how much money you're losing to turnover, reduced productivity, 
+          and absenteeism while showing the incredible ROI of investing in employee engagement.
           </p>
+          <div className="grid md:grid-cols-3 gap-6 mt-10">
+              <div className="bg-black bg-opacity-50 p-6 rounded-xl border border-gray-800">
+                <div className="flex justify-center mb-4">
+                  <TrendingUp className="w-8 h-8 text-[#00FFAB]" />
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2">Calculate Hidden Costs</h3>
+                <p className="text-gray-400">Uncover the true financial impact of employee disengagement on your bottom line</p>
+              </div>
+              <div className="bg-black bg-opacity-50 p-6 rounded-xl border border-gray-800">
+                <div className="flex justify-center mb-4">
+                  <DollarSign className="w-8 h-8 text-[#00FFAB]" />
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2">Potential Savings</h3>
+                <p className="text-gray-400">See how much you could save by improving engagement by just 1-2 points</p>
+              </div>
+              <div className="bg-black bg-opacity-50 p-6 rounded-xl border border-gray-800">
+                <div className="flex justify-center mb-4">
+                  <Users className="w-8 h-8 text-[#00FFAB]" />
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2">Revenue Impact</h3>
+                <p className="text-gray-400">Discover how engaged employees directly contribute to increased revenue</p>
+              </div>
+            </div>
         </div>
 
         {/* Main Calculator Component */}

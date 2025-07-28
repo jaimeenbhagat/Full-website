@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
-import { CheckCircle, AlertCircle } from "lucide-react";
+import { CheckCircle, AlertCircle, Calculator, TrendingUp, Users, DollarSign } from "lucide-react";
 
 // Custom Card components
 const Card = ({ children, className = "" }) => (
@@ -29,18 +29,23 @@ const Slider = ({ defaultValue, max, step, onValueChange, className = "", ...pro
     <div className={`relative ${className}`}>
       <input
         type="range"
-        min="0"
+        min="1"
         max={max}
         step={step}
         value={value}
         onChange={handleChange}
-        className="w-full h-3 bg-gray-800 rounded-lg appearance-none cursor-pointer"
-        style={{
-          background: `linear-gradient(to right, #00FFAB 0%, #00FFAB ${(value / max) * 100}%, #374151 ${(value / max) * 100}%, #374151 100%)`
-        }}
+        className="w-full h-3 bg-gray-800 rounded-lg appearance-none cursor-pointer slider-custom"
         {...props}
       />
+      <div className="flex justify-between text-xs text-gray-400 mt-2">
+        <span>1</span>
+        <span className="mr-12">5</span>
+        <span>10</span>
+      </div>
       <style jsx>{`
+        .slider-custom {
+          background: linear-gradient(to right, #00FFAB 0%, #00FFAB ${((value-1) / 9) * 50}%, #00FFAB ${((value-1) / 9) * 100}%, #374151 ${((value-1) / 9) * 100}%, #374151 100%);
+        }
         input[type="range"]::-webkit-slider-thumb {
           appearance: none;
           width: 24px;
@@ -48,7 +53,8 @@ const Slider = ({ defaultValue, max, step, onValueChange, className = "", ...pro
           background: #00FFAB;
           border-radius: 50%;
           cursor: pointer;
-          border: 2px solid rgba(255, 255, 255, 0.2);
+          border: 3px solid #1f2937;
+          box-shadow: 0 0 10px rgba(0, 255, 171, 0.5);
         }
         input[type="range"]::-moz-range-thumb {
           width: 24px;
@@ -56,7 +62,8 @@ const Slider = ({ defaultValue, max, step, onValueChange, className = "", ...pro
           background: #00FFAB;
           border-radius: 50%;
           cursor: pointer;
-          border: 2px solid rgba(255, 255, 255, 0.2);
+          border: 3px solid #1f2937;
+          box-shadow: 0 0 10px rgba(0, 255, 171, 0.5);
         }
       `}</style>
     </div>
@@ -84,7 +91,7 @@ const REVENUE_INCREASE_FACTOR_MIN = 0.02;
 const REVENUE_INCREASE_FACTOR_MAX = 0.05;
 
 // Colors for the Pie Chart
-const COLORS = ["#ef4444", "#dc2626", "#00FFAB"];
+const COLORS = ["#ef4444", "#f59e0b", "#00FFAB"];
 
 export default function EngagementCalculatorForm() {
   // Core State Variables for Inputs
@@ -320,198 +327,238 @@ export default function EngagementCalculatorForm() {
   };
 
   const inputClasses = (fieldName) => `
-    w-full p-3 bg-black bg-opacity-40 text-white border rounded-lg focus:ring-2 focus:ring-[#00FFAB] outline-none
+    w-full p-3 bg-black bg-opacity-40 text-white border rounded-lg focus:ring-2 focus:ring-[#00FFAB] outline-none transition-all duration-300
     ${validationErrors[fieldName] ? 'border-red-500 focus:border-red-500 focus:ring-red-400' : 'border-gray-800'}
   `;
+
+  const getEngagementColor = (score) => {
+    if (score <= 3) return "text-red-400";
+    if (score <= 6) return "text-yellow-400";
+    return "text-[#00FFAB]";
+  };
+
+  const getEngagementLabel = (score) => {
+    if (score <= 3) return "Needs Improvement";
+    if (score <= 6) return "Moderate Engagement";
+    return "High Engagement";
+  };
 
   return (
     <div className="max-w-7xl mx-auto">
       {!showResults ? (
-        // Centered Input Form
-        <div className="flex justify-center">
-          <Card className="bg-black border-gray-800 rounded-3xl p-10 shadow-xl text-center max-w-2xl w-full">
-            <CardContent className="space-y-8">
-              <h2 className="text-3xl font-bold text-[#00FFAB] mb-6">Input Your Details</h2>
-              
-              {/* Status Messages */}
-              {submitStatus === "success" && (
-                <div className="bg-green-900/20 border border-[#00FFAB] rounded-lg p-4 flex items-center gap-3 animate-fade-in">
-                  <CheckCircle className="text-[#00FFAB] w-5 h-5" />
-                  <span className="text-[#00FFAB]">
-                    ROI calculation submitted successfully! We'll get back to you soon.
-                  </span>
+        <div className="space-y-12">
+          {/* Centered Input Form */}
+          <div className="flex justify-center">
+            <Card className="bg-black border-gray-700 rounded-3xl p-8 shadow-2xl max-w-2xl w-full">
+              <CardContent className="space-y-8">
+                <div className="text-center">
+                  <h2 className="text-3xl font-bold text-[#00FFAB] mb-2">Enter Your Company Details</h2>
+                  <p className="text-black">All information is kept confidential and secure</p>
                 </div>
-              )}
-
-              {submitStatus === "error" && (
-                <div className="bg-red-900/20 border border-red-400 rounded-lg p-4 flex items-center gap-3 animate-fade-in">
-                  <AlertCircle className="text-red-400 w-5 h-5" />
-                  <span className="text-red-400">
-                    Failed to submit ROI calculation. Please try again or contact us directly.
-                  </span>
-                </div>
-              )}
-              
-              {/* Input Fields */}
-              <div>
-                <label htmlFor="numEmployees" className="block text-white text-lg font-bold mb-3">
-                  Total Number of Employees
-                </label>
-                <input
-                  type="number"
-                  id="numEmployees"
-                  className="w-full p-4 bg-black bg-opacity-40 text-white border border-gray-800 rounded-xl focus:ring-3 focus:ring-[#00FFAB] focus:border-transparent outline-none transition-all duration-300 text-xl font-medium placeholder-gray-600"
-                  value={numEmployees}
-                  onChange={(e) => setNumEmployees(Number(e.target.value))}
-                  min="1"
-                  placeholder="e.g., 100"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="avgAnnualSalary" className="block text-white text-lg font-bold mb-3">
-                  Average Annual Salary (in ₹)
-                </label>
-                <input
-                  type="number"
-                  id="avgAnnualSalary"
-                  className="w-full p-4 bg-black bg-opacity-40 text-white border border-gray-800 rounded-xl focus:ring-3 focus:ring-[#00FFAB] focus:border-transparent outline-none transition-all duration-300 text-xl font-medium placeholder-gray-600"
-                  value={avgAnnualSalary}
-                  onChange={(e) => setAvgAnnualSalary(Number(e.target.value))}
-                  min="0"
-                  placeholder="e.g., 480000"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="annualRevenue" className="block text-white text-lg font-bold mb-3">
-                  Total Annual Revenue (in ₹)
-                </label>
-                <input
-                  type="number"
-                  id="annualRevenue"
-                  className="w-full p-4 bg-black bg-opacity-40 text-white border border-gray-800 rounded-xl focus:ring-3 focus:ring-[#00FFAB] focus:border-transparent outline-none transition-all duration-300 text-xl font-medium placeholder-gray-600"
-                  value={annualRevenue}
-                  onChange={(e) => setAnnualRevenue(Number(e.target.value))}
-                  min="0"
-                  placeholder="e.g., 50000000"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="employeesWhoLeft" className="block text-white text-lg font-bold mb-3">
-                  Number of Employees Who Left Last Year
-                </label>
-                <input
-                  type="number"
-                  id="employeesWhoLeft"
-                  className={`w-full p-4 bg-black bg-opacity-40 text-white border rounded-xl focus:ring-3 focus:ring-[#00FFAB] focus:border-transparent outline-none transition-all duration-300 text-xl font-medium placeholder-gray-600 ${
-                    turnoverInputError ? "border-red-500" : "border-gray-800"
-                  }`}
-                  value={employeesWhoLeft}
-                  onChange={(e) => {
-                    const value = Number(e.target.value);
-                    setEmployeesWhoLeft(value);
-                    if (value > numEmployees) {
-                      setTurnoverInputError("The number of employees who left cannot be more than your total employees.");
-                    } else {
-                      setTurnoverInputError("");
-                    }
-                  }}
-                  min="0"
-                  max={numEmployees}
-                  placeholder="e.g., 10"
-                />
-                {turnoverInputError && (
-                  <p className="text-red-500 text-sm mt-2 font-medium">{turnoverInputError}</p>
+                
+                {/* Status Messages */}
+                {submitStatus === "success" && (
+                  <div className="bg-green-900/20 border border-[#00FFAB] rounded-lg p-4 flex items-center gap-3 animate-fade-in">
+                    <CheckCircle className="text-[#00FFAB] w-5 h-5" />
+                    <span className="text-[#00FFAB]">
+                      ROI calculation submitted successfully! We'll get back to you soon.
+                    </span>
+                  </div>
                 )}
-              </div>
 
-              <div>
-                <label htmlFor="avgExtraAbsenteeismDaysPerEmployee" className="block text-white text-lg font-bold mb-3">
-                  Average Absenteeism Per Year (in days)
-                </label>
-                <input
-                  type="number"
-                  id="avgExtraAbsenteeismDaysPerEmployee"
-                  className="w-full p-4 bg-black bg-opacity-40 text-white border border-gray-800 rounded-xl focus:ring-3 focus:ring-[#00FFAB] focus:border-transparent outline-none transition-all duration-300 text-xl font-medium placeholder-gray-600"
-                  value={avgExtraAbsenteeismDaysPerEmployee}
-                  onChange={(e) => setAvgExtraAbsenteeismDaysPerEmployee(Number(e.target.value))}
-                  min="0"
-                  placeholder="e.g., 2"
-                />
-              </div>
+                {submitStatus === "error" && (
+                  <div className="bg-red-900/20 border border-red-400 rounded-lg p-4 flex items-center gap-3 animate-fade-in">
+                    <AlertCircle className="text-red-400 w-5 h-5" />
+                    <span className="text-red-400">
+                      Failed to submit ROI calculation. Please try again or contact us directly.
+                    </span>
+                  </div>
+                )}
+                
+                {/* Input Fields Grid */}
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <label htmlFor="numEmployees" className="block text-white text-sm font-bold mb-2">
+                      Total Number of Employees
+                    </label>
+                    <input
+                      type="number"
+                      id="numEmployees"
+                      className="w-full p-4 bg-black bg-opacity-60 text-white border border-gray-700 rounded-xl focus:ring-2 focus:ring-[#00FFAB] focus:border-transparent outline-none transition-all duration-300 text-lg font-medium placeholder-gray-500"
+                      value={numEmployees}
+                      onChange={(e) => setNumEmployees(Number(e.target.value))}
+                      min="1"
+                      placeholder="e.g., 100"
+                    />
+                  </div>
 
-              {/* Engagement Slider */}
-              <div className="pt-6">
-                <label htmlFor="engagementScoreSlider" className="block text-white text-lg font-bold mb-3">
-                  Employee Engagement Score (on a scale of 1 to 10)
-                  <span className="block text-sm text-gray-500 mt-1">
-                    (1 = Not engaged at all, 10 = Fully engaged and motivated.)
-                  </span>
-                </label>
-                <Slider
-                  defaultValue={engagementScore}
-                  max={10}
-                  step={1}
-                  onValueChange={setEngagementScore}
-                  className="w-full mt-4"
-                  id="engagementScoreSlider"
-                />
-                <p className="text-base text-white mt-4">
-                  Current Engagement Level: <span className="text-[#00FFAB] font-bold">{engagementScore[0]}/10</span>
-                </p>
-              </div>
+                  <div>
+                    <label htmlFor="avgAnnualSalary" className="block text-white text-sm font-bold mb-2">
+                      Average Annual Salary (₹)
+                    </label>
+                    <input
+                      type="number"
+                      id="avgAnnualSalary"
+                      className="w-full p-4 bg-black bg-opacity-60 text-white border border-gray-700 rounded-xl focus:ring-2 focus:ring-[#00FFAB] focus:border-transparent outline-none transition-all duration-300 text-lg font-medium placeholder-gray-500"
+                      value={avgAnnualSalary}
+                      onChange={(e) => setAvgAnnualSalary(Number(e.target.value))}
+                      min="0"
+                      placeholder="e.g., 480000"
+                    />
+                  </div>
 
-              <button
-                className={`w-full bg-[#00FFAB] text-black py-3 rounded-xl font-bold text-2xl tracking-wide uppercase mt-10 transition-all duration-300 transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-[#00FFAB] ${
-                  turnoverInputError ? "opacity-40 cursor-not-allowed" : ""
-                }`}
-                onClick={handleCalculateButtonClick}
-                disabled={!!turnoverInputError}
-              >
-                Calculate Your Engagement ROI
-              </button>
-            </CardContent>
-          </Card>
+                  <div>
+                    <label htmlFor="employeesWhoLeft" className="block text-white text-sm font-bold mb-2">
+                      Employees Who Left Last Year
+                    </label>
+                    <input
+                      type="number"
+                      id="employeesWhoLeft"
+                      className={`w-full p-4 bg-black bg-opacity-60 text-white border rounded-xl focus:ring-2 focus:ring-[#00FFAB] focus:border-transparent outline-none transition-all duration-300 text-lg font-medium placeholder-gray-500 ${
+                        turnoverInputError ? "border-red-500" : "border-gray-700"
+                      }`}
+                      value={employeesWhoLeft}
+                      onChange={(e) => {
+                        const value = Number(e.target.value);
+                        setEmployeesWhoLeft(value);
+                        if (value > numEmployees) {
+                          setTurnoverInputError("Cannot exceed total employees");
+                        } else {
+                          setTurnoverInputError("");
+                        }
+                      }}
+                      min="0"
+                      max={numEmployees}
+                      placeholder="e.g., 10"
+                    />
+                    {turnoverInputError && (
+                      <p className="text-red-400 text-sm mt-1 font-medium">{turnoverInputError}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label htmlFor="avgExtraAbsenteeismDaysPerEmployee" className="block text-white text-sm font-bold mb-2">
+                      Average Absenteeism (days/year)
+                    </label>
+                    <input
+                      type="number"
+                      id="avgExtraAbsenteeismDaysPerEmployee"
+                      className="w-full p-4 bg-black bg-opacity-60 text-white border border-gray-700 rounded-xl focus:ring-2 focus:ring-[#00FFAB] focus:border-transparent outline-none transition-all duration-300 text-lg font-medium placeholder-gray-500"
+                      value={avgExtraAbsenteeismDaysPerEmployee}
+                      onChange={(e) => setAvgExtraAbsenteeismDaysPerEmployee(Number(e.target.value))}
+                      min="0"
+                      placeholder="e.g., 2"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="annualRevenue" className="block text-white text-sm font-bold mb-2">
+                    Total Annual Revenue (₹)
+                  </label>
+                  <input
+                    type="number"
+                    id="annualRevenue"
+                    className="w-full p-4 bg-black bg-opacity-60 text-white border border-gray-700 rounded-xl focus:ring-2 focus:ring-[#00FFAB] focus:border-transparent outline-none transition-all duration-300 text-lg font-medium placeholder-gray-500"
+                    value={annualRevenue}
+                    onChange={(e) => setAnnualRevenue(Number(e.target.value))}
+                    min="0"
+                    placeholder="e.g., 50000000"
+                  />
+                </div>
+
+                {/* Enhanced Engagement Slider */}
+                <div className="pt-4">
+                  <label htmlFor="engagementScoreSlider" className="block text-white text-sm font-bold mb-4">
+                    Current Employee Engagement Score
+                  </label>
+                  <div className="bg-black bg-opacity-50 p-6 rounded-xl">
+                    <Slider
+                      defaultValue={engagementScore}
+                      max={10}
+                      step={1}
+                      onValueChange={setEngagementScore}
+                      className="w-full"
+                      id="engagementScoreSlider"
+                    />
+                    <div className="flex justify-between items-center mt-4">
+                      <div className="text-center">
+                        <div className={`text-3xl font-bold ${getEngagementColor(engagementScore[0])}`}>
+                          {engagementScore[0]}/10
+                        </div>
+                        <div className={`text-sm font-medium ${getEngagementColor(engagementScore[0])}`}>
+                          {getEngagementLabel(engagementScore[0])}
+                        </div>
+                      </div>
+                      <div className="text-right text-sm text-gray-400">
+                        <div>1-3: Needs Improvement</div>
+                        <div>4-6: Moderate Engagement</div>
+                        <div>7-10: High Engagement</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  className={`w-full bg-gradient-to-r from-[#00FFAB] to-[#00E69B] text-black py-4 rounded-xl font-bold text-xl tracking-wide transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg hover:shadow-[#00FFAB]/20 active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-[#00FFAB]/50 ${
+                    turnoverInputError ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
+                  onClick={handleCalculateButtonClick}
+                  disabled={!!turnoverInputError}
+                >
+                  <div className="flex items-center justify-center gap-3">
+                    <Calculator className="w-6 h-6" />
+                    Calculate Your Engagement ROI
+                  </div>
+                </button>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       ) : (
         // Split Layout with Results
-        <div className="grid lg:grid-cols-2 gap-16">
+        <div className="grid lg:grid-cols-2 gap-12">
           {/* Input Card */}
-          <Card className="bg-black border-gray-800 rounded-3xl p-10 shadow-xl text-center">
-            <CardContent className="space-y-8">
-              <h2 className="text-3xl font-bold text-[#00FFAB] mb-6">Your Input Details</h2>
+          <Card className="bg-black border-gray-700 rounded-3xl shadow-2xl">
+            <CardContent className="p-8">
+              <h2 className="text-2xl font-bold text-[#00FFAB] mb-6 text-center">Your Company Details</h2>
               
-              <div className="space-y-4 text-center">
-                <div className="flex justify-between items-center py-2 border-b border-gray-800">
-                  <span className="text-white font-bold">Total Employees:</span>
-                  <span className="text-white font-medium">{numEmployees}</span>
+              <div className="space-y-4">
+                <div className="flex justify-between items-center py-3 border-b border-gray-800">
+                  <span className="text-white font-medium">Total Employees:</span>
+                  <span className="text-white font-bold">{numEmployees.toLocaleString()}</span>
                 </div>
-                <div className="flex justify-between items-center py-2 border-b border-gray-800">
-                  <span className="text-white font-bold">Average Annual Salary:</span>
-                  <span className="text-white font-medium">{formatINR(avgAnnualSalary)}</span>
+                <div className="flex justify-between items-center py-3 border-b border-gray-800">
+                  <span className="text-white font-medium">Average Annual Salary:</span>
+                  <span className="text-white font-bold">{formatINR(avgAnnualSalary)}</span>
                 </div>
-                <div className="flex justify-between items-center py-2 border-b border-gray-800">
-                  <span className="text-white font-bold">Annual Revenue:</span>
-                  <span className="text-white font-medium">{formatINR(annualRevenue)}</span>
+                <div className="flex justify-between items-center py-3 border-b border-gray-800">
+                  <span className="text-white font-medium">Annual Revenue:</span>
+                  <span className="text-white font-bold">{formatINR(annualRevenue)}</span>
                 </div>
-                <div className="flex justify-between items-center py-2 border-b border-gray-800">
-                  <span className="text-white font-bold">Employees Who Left:</span>
-                  <span className="text-white font-medium">{employeesWhoLeft}</span>
+                <div className="flex justify-between items-center py-3 border-b border-gray-800">
+                  <span className="text-white font-medium">Employees Who Left:</span>
+                  <span className="text-red-400 font-bold">{employeesWhoLeft}</span>
                 </div>
-                <div className="flex justify-between items-center py-2 border-b border-gray-800">
-                  <span className="text-white font-bold">Average Absenteeism:</span>
-                  <span className="text-white font-medium">{avgExtraAbsenteeismDaysPerEmployee} days</span>
+                <div className="flex justify-between items-center py-3 border-b border-gray-800">
+                  <span className="text-white font-medium">Average Absenteeism:</span>
+                  <span className="text-yellow-400 font-bold">{avgExtraAbsenteeismDaysPerEmployee} days</span>
                 </div>
-                <div className="flex justify-between items-center py-2">
-                  <span className="text-white font-bold">Engagement Score:</span>
-                  <span className="text-[#00FFAB] font-medium">{engagementScore[0]}/10</span>
+                <div className="flex justify-between items-center py-3 border-b border-gray-800">
+                  <span className="text-white font-medium">Engagement Score:</span>
+                  <div className="text-right">
+                    <div className={`font-bold text-lg ${getEngagementColor(engagementScore[0])}`}>
+                      {engagementScore[0]}/10
+                    </div>
+                    <div className={`text-sm ${getEngagementColor(engagementScore[0])}`}>
+                      {getEngagementLabel(engagementScore[0])}
+                    </div>
+                  </div>
                 </div>
               </div>
 
               <button
-                className="w-full bg-[#00FFAB] text-black uppercase py-4 rounded-xl font-bold text-xl transition-all duration-300 transform hover:scale-105"
+                className="w-full mt-8 bg-[#00FFAB] hover:from-gray-600 hover:to-gray-500 text-black py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-[1.02]"
                 onClick={() => {
                   setShowResults(false);
                   setEmail('');
@@ -520,102 +567,148 @@ export default function EngagementCalculatorForm() {
                   setValidationErrors({});
                 }}
               >
-                Recalculate
+                Recalculate ROI
               </button>
             </CardContent>
           </Card>
 
           {/* Results Card */}
-          <Card className="bg-black border-gray-800 rounded-3xl p-10 shadow-xl">
-            <CardContent className="space-y-8">
-              <h2 className="text-3xl font-bold text-[#00FFAB] mb-6 text-center">Your Engagement Impact</h2>
+          <Card className="bg-black border-gray-700 rounded-3xl shadow-2xl">
+            <CardContent className="p-8">
+              <div className="text-center mb-8">
+                <h2 className="text-3xl font-bold text-[#00FFAB] mb-2">Your Engagement Impact</h2>
+                <p className="text-gray-400">The financial reality of employee engagement</p>
+              </div>
+              
+              {/* Key Metrics Cards */}
+              <div className="grid grid-cols-2 gap-4 mb-8">
+                <div className="bg-red-900 bg-opacity-20 border border-red-500 rounded-xl p-4 text-center">
+                  <div className="text-red-400 text-2xl font-bold">{formatINR(roiData.totalHiddenLoss)}</div>
+                  <div className="text-red-300 text-sm font-bold">Total Hidden Cost</div>
+                </div>
+                <div className="bg-green-900 bg-opacity-20 border border-[#00FFAB] rounded-xl p-4 text-center">
+                  <div className="text-[#00FFAB] text-2xl font-bold">
+                    {formatINR(roiData.potentialSavingsMax)}
+                  </div>
+                  <div className="text-green-300 text-sm font-bold">Potential Savings</div>
+                </div>
+              </div>
               
               <div className="space-y-6">
-                <div className="flex justify-between items-center py-3">
-                  <span className="text-white font-bold text-lg">Annual Cost of Disengagement:</span>
-                  <span className="text-red-500 font-bold text-xl">{formatINR(roiData.totalDisengagementCost)}</span>
-                </div>
-                
-                <div className="flex justify-between items-center py-3">
-                  <span className="text-white font-bold text-lg">Annual Cost of Turnover:</span>
-                  <span className="text-red-500 font-bold text-xl">{formatINR(roiData.totalTurnoverCost)}</span>
-                </div>
-                
-                <div className="flex justify-between items-center py-3 border-t border-gray-700 pt-6">
-                  <span className="text-white font-bold text-lg">Total Hidden Cost:</span>
-                  <span className="text-red-500 font-bold text-xl">{formatINR(roiData.totalHiddenLoss)}</span>
-                </div>
-                
-                <div className="flex justify-between items-center py-3">
-                  <span className="text-white font-bold text-lg">Potential Annual Revenue Boost:</span>
-                  <span className="text-[#00FFAB] font-bold text-md">
-                    {formatINR(roiData.potentialRevenueIncreaseMin)}–{formatINR(roiData.potentialRevenueIncreaseMax)}
-                  </span>
-                </div>
-                
-                <div className="flex justify-between items-center py-3">
-                  <div className="flex flex-col">
-                    <span className="text-white font-bold text-lg">Potential Annual Savings:</span>
-                    <span className="text-white font-medium text-sm">
-                      by improving engagement by just 1-2 points
-                    </span>
+                <div className="bg-black bg-opacity-30 rounded-xl pl-4 pt-4">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-white font-bold">Annual Disengagement Cost:</span>
+                    <span className="text-red-400 font-bold text-lg">{formatINR(roiData.totalDisengagementCost)}</span>
                   </div>
-                  <span className="text-[#00FFAB] font-bold text-md">
-                    {formatINR(roiData.potentialSavingsMin)}–{formatINR(roiData.potentialSavingsMax)}
-                  </span>
+                </div>
+                
+                <div className="bg-black bg-opacity-30 rounded-xl pl-4 pt-4">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-white font-bold">Annual Turnover Cost:</span>
+                    <span className="text-[#00FFAB] font-bold text-lg">{formatINR(roiData.totalTurnoverCost)}</span>
+                  </div>
+                </div>
+                
+                <div className="bg-black bg-opacity-30 rounded-xl pl-4 pt-4">
+                  <div className="flex justify-between items-center mb-2">
+                    <div>
+                      <div className="text-white font-bold">Potential Revenue Boost:</div>
+                      <div className="text-gray-400 text-sm">From improved engagement</div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-[#00FFAB] font-bold text-lg">
+                        {formatINR(roiData.potentialRevenueIncreaseMin)}–{formatINR(roiData.potentialRevenueIncreaseMax)}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-black bg-opacity-30 rounded-xl pl-4 pt-4">
+                  <div className="flex justify-between items-center mb-3">
+                    <div>
+                      <div className="text-white font-bold">Annual Savings Potential:</div>
+                      <div className="text-gray-400 text-sm">By improving engagement 1-2 points</div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-[#00FFAB] font-bold text-lg">
+                        {formatINR(roiData.potentialSavingsMin)}–{formatINR(roiData.potentialSavingsMax)}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              {/* Pie Chart */}
+              {/* Enhanced Pie Chart */}
               <div className="mt-8">
-                <h3 className="text-xl font-bold text-white mb-4 text-center">Cost Breakdown</h3>
-                <ResponsiveContainer width="100%" height={300}>
-                  <PieChart>
-                    <Pie
-                      data={pieData}
-                      dataKey="value"
-                      nameKey="name"
-                      cx="50%"
-                      cy="50%"
-                      outerRadius={110}
-                      label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                      labelLine={false}
-                      animationDuration={1000}
-                      className="mr-32"
-                    >
-                      {pieData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                      ))}
-                    </Pie>
-                    <Tooltip
-                      formatter={(val) => formatINR(Math.round(val))}
-                      contentStyle={{
-                        backgroundColor: "#00FFAB",
-                        border: "1px solid #00FFAB",
-                        color: "#00FFAB",
-                        borderRadius: "15px",
-                        padding: "15px",
-                      }}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
+                <h3 className="text-xl font-bold text-white mb-4 text-center">Cost Breakdown Analysis</h3>
+                <div className="bg-black bg-opacity-30 rounded-xl p-4">
+                  <ResponsiveContainer width="100%" height={280}>
+                    <PieChart>
+                      <Pie
+                        data={pieData}
+                        dataKey="value"
+                        nameKey="name"
+                        cx="50%"
+                        cy="50%"
+                        outerRadius={90}
+                        innerRadius={40}
+                        labelLine={false}
+                        animationDuration={1200}
+                        animationBegin={0}
+                      >
+                        {pieData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        ))}
+                      </Pie>
+                    </PieChart>
+                  </ResponsiveContainer>
+                  
+                  {/* Legend */}
+                  <div className="flex justify-center  space-x-6">
+                    {pieData.map((entry, index) => (
+                      <div key={entry.name} className="flex items-center">
+                        <div 
+                          className="w-3 h-3 rounded-full mr-2" 
+                          style={{backgroundColor: COLORS[index]}}
+                        ></div>
+                        <span className="text-white text-sm font-medium">{entry.name}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* ROI Summary */}
+              <div className="mt-8 bg-black bg-opacity-5  rounded-xl p-6">
+                <h4 className="text-lg font-bold text-[#00FFAB] mb-3 text-center">💡 Key Insights</h4>
+                <div className="space-y-2 text-sm text-gray-300">
+                  <div>• Your organization could save <span className="text-[#00FFAB] font-bold">{formatINR(roiData.potentialSavingsMax)}</span> annually by improving engagement</div>
+                  <div>• Engaged employees could boost revenue by <span className="text-[#00FFAB] font-bold">{formatINR(roiData.potentialRevenueIncreaseMax)}</span></div>
+                  <div>• Current engagement level is costing you <span className="text-red-400 font-bold">{formatINR(roiData.totalHiddenLoss)}</span> per year</div>
+                </div>
               </div>
             </CardContent>
           </Card>
         </div>
       )}
 
-      {/* Contact Modal */}
+      {/* Enhanced Contact Modal */}
       {showContactModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-black p-8 rounded-xl max-w-md w-full">
-            <h3 className="text-2xl font-bold text-[#00FFAB] mb-6">Contact Information</h3>
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
+          <div className="bg-black border border-gray-700 p-8 rounded-2xl max-w-md w-full shadow-2xl">
+            <div className="text-center mb-6">
+              <div className="bg-gradient-to-r from-[#00FFAB] to-[#00E69B] p-3 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                <Calculator className="w-8 h-8 text-black" />
+              </div>
+              <h3 className="text-2xl font-bold text-[#00FFAB] mb-2">Get Your Detailed ROI Report</h3>
+              <p className="text-black text-sm">Enter your contact details to receive your comprehensive engagement analysis</p>
+            </div>
             
             {/* Status Messages in Modal */}
             {submitStatus === "success" && (
               <div className="bg-green-900/20 border border-[#00FFAB] rounded-lg p-4 flex items-center gap-3 animate-fade-in mb-4">
-                <CheckCircle className="text-[#00FFAB] w-5 h-5" />
-                <span className="text-[#00FFAB]">
+                <CheckCircle className="text-[#00FFAB] w-5 h-5 flex-shrink-0" />
+                <span className="text-[#00FFAB] text-sm">
                   ROI calculation submitted successfully!
                 </span>
               </div>
@@ -623,53 +716,51 @@ export default function EngagementCalculatorForm() {
 
             {submitStatus === "error" && (
               <div className="bg-red-900/20 border border-red-400 rounded-lg p-4 flex items-center gap-3 animate-fade-in mb-4">
-                <AlertCircle className="text-red-400 w-5 h-5" />
-                <span className="text-red-400">
+                <AlertCircle className="text-red-400 w-5 h-5 flex-shrink-0" />
+                <span className="text-red-400 text-sm">
                   Failed to submit. Please try again.
                 </span>
               </div>
             )}
             
-            <div>
-              <div className="space-y-4">
-                <div>
-                  <label htmlFor="email" className="block text-white font-bold mb-2">
-                    Email Address *
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    value={email}
-                    onChange={handleEmailChange}
-                    placeholder="your@email.com"
-                    required
-                    className={inputClasses('email')}
-                  />
-                  {validationErrors.email && (
-                    <p className="text-red-400 text-sm mt-1">{validationErrors.email}</p>
-                  )}
-                </div>
-
-                <div>
-                  <label htmlFor="phoneNumber" className="block text-white font-bold mb-2">
-                    Phone Number *
-                  </label>
-                  <input
-                    type="tel"
-                    id="phoneNumber"
-                    value={phoneNumber}
-                    onChange={handlePhoneChange}
-                    placeholder="+91 98765 43210"
-                    required
-                    className={inputClasses('phoneNumber')}
-                  />
-                  {validationErrors.phoneNumber && (
-                    <p className="text-red-400 text-sm mt-1">{validationErrors.phoneNumber}</p>
-                  )}
-                </div>
+            <div className="space-y-4">
+              <div>
+                <label htmlFor="email" className="block text-white font-medium mb-2 text-sm">
+                  Email Address *
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  value={email}
+                  onChange={handleEmailChange}
+                  placeholder="your@company.com"
+                  required
+                  className={inputClasses('email')}
+                />
+                {validationErrors.email && (
+                  <p className="text-red-400 text-xs mt-1">{validationErrors.email}</p>
+                )}
               </div>
 
-              <div className="flex gap-4 mt-6">
+              <div>
+                <label htmlFor="phoneNumber" className="block text-white font-medium mb-2 text-sm">
+                  Phone Number *
+                </label>
+                <input
+                  type="tel"
+                  id="phoneNumber"
+                  value={phoneNumber}
+                  onChange={handlePhoneChange}
+                  placeholder="+91 98765 43210"
+                  required
+                  className={inputClasses('phoneNumber')}
+                />
+                {validationErrors.phoneNumber && (
+                  <p className="text-red-400 text-xs mt-1">{validationErrors.phoneNumber}</p>
+                )}
+              </div>
+
+              <div className="flex gap-3 mt-6">
                 <button
                   type="button"
                   onClick={() => {
@@ -679,7 +770,7 @@ export default function EngagementCalculatorForm() {
                     setValidationErrors({});
                     setSubmitStatus(null);
                   }}
-                  className="flex-1 bg-gray-700 text-white py-3 rounded-lg font-bold transition-all duration-300 hover:bg-gray-600"
+                  className="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-3 rounded-lg font-medium transition-all duration-300"
                 >
                   Cancel
                 </button>
@@ -687,12 +778,23 @@ export default function EngagementCalculatorForm() {
                   type="button"
                   onClick={handleContactSubmit}
                   disabled={isSubmitting}
-                  className="flex-1 bg-gradient-to-r from-[#00FFAB] to-[#00E69B] text-black py-3 rounded-lg font-bold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 bg-gradient-to-r from-[#00FFAB] to-[#00E69B] hover:from-[#00E69B] hover:to-[#00FFAB] text-black py-3 rounded-lg font-bold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02]"
                 >
-                  {isSubmitting ? "Submitting..." : "Get Results"}
+                  {isSubmitting ? (
+                    <div className="flex items-center justify-center gap-2">
+                      <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
+                      Submitting...
+                    </div>
+                  ) : (
+                    "Get My ROI Report"
+                  )}
                 </button>
               </div>
             </div>
+
+            <p className="text-xs text-gray-500 text-center mt-4">
+              🔒 Your information is secure and will only be used to send your ROI report
+            </p>
           </div>
         </div>
       )}
@@ -704,6 +806,21 @@ export default function EngagementCalculatorForm() {
         }
         .animate-fade-in {
           animation: fade-in 0.3s ease-out; 
+        }
+        
+        /* Custom scrollbar for webkit browsers */
+        ::-webkit-scrollbar {
+          width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+          background: #1f2937;
+        }
+        ::-webkit-scrollbar-thumb {
+          background: #00FFAB;
+          border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+          background: #00E69B;
         }
       `}</style>
     </div>

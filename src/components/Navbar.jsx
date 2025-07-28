@@ -37,7 +37,7 @@ function Navbar() {
   };
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 backdrop-blur-md bg-black/30">
+    <header className="fixed top-0 left-0 w-full z-50 backdrop-blur-xs ">
       <div className="max-w-7xl mx-auto px-6 sm:px-6 md:px-10 py-4 flex items-center justify-between relative">
 
         {/* Logo - Left */}
