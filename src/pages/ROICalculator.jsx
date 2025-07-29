@@ -24,7 +24,10 @@ const ROICalculator = () => {
           Our advanced calculator reveals how much money you're losing to turnover, reduced productivity, 
           and absenteeism while showing the incredible ROI of investing in employee engagement.
           </p>
-          <div className="grid md:grid-cols-3 gap-6 mt-10">
+          
+          {/* Centered Feature Cards Section */}
+          <div className="flex justify-center items-center inset-0 pointer-events-none m-10">
+            <div className="grid md:grid-cols-3 gap-6 max-w-4xl inset-0 pointer-events-auto">
               <div className="bg-black bg-opacity-50 p-6 rounded-xl border border-gray-800">
                 <div className="flex justify-center mb-4">
                   <TrendingUp className="w-8 h-8 text-[#00FFAB]" />
@@ -47,6 +50,7 @@ const ROICalculator = () => {
                 <p className="text-gray-400">Discover how engaged employees directly contribute to increased revenue</p>
               </div>
             </div>
+          </div>
         </div>
 
         {/* Main Calculator Component */}
