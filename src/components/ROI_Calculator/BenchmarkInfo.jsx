@@ -16,7 +16,7 @@ const CardContent = ({ children, className = "" }) => (
 const BenchmarkInfo = () => {
   return (
     <div className="min-h-screen bg-black p-8 flex items-center justify-center">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-2xl mx-auto">
         <Card className="bg-black border-gray-800 border-2">
           <CardContent className="p-10">
             <h3 className="text-3xl font-bold text-[#00FFAB] mb-8">Our Approach & Key Benchmarks</h3>

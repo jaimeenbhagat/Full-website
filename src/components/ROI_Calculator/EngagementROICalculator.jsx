@@ -338,7 +338,7 @@ export default function EngagementCalculatorForm() {
   };
 
   const getEngagementLabel = (score) => {
-    if (score <= 3) return "Needs Improvement";
+    if (score <= 3) return "Low Engagement";
     if (score <= 6) return "Moderate Engagement";
     return "High Engagement";
   };
@@ -353,7 +353,7 @@ export default function EngagementCalculatorForm() {
               <CardContent className="space-y-8">
                 <div className="text-center">
                   <h2 className="text-3xl font-bold text-[#00FFAB] mb-2">Enter Your Company Details</h2>
-                  <p className="text-black">All information is kept confidential and secure</p>
+                  <p className="text-white text-md">All information is kept confidential and secure</p>
                 </div>
                 
                 {/* Status Messages */}
@@ -491,7 +491,7 @@ export default function EngagementCalculatorForm() {
                         </div>
                       </div>
                       <div className="text-right text-sm text-gray-400">
-                        <div>1-3: Needs Improvement</div>
+                        <div>1-3: Low Engagement</div>
                         <div>4-6: Moderate Engagement</div>
                         <div>7-10: High Engagement</div>
                       </div>
