@@ -110,7 +110,7 @@ const CultureQuiz = () => {
   // API URL function
   const getApiUrl = () => {
     if (import.meta.env.MODE === 'production') {
-      return import.meta.env.VITE_API_URL || 'https://onethrive-backend-hk76.vercel.app/';
+      return import.meta.env.VITE_API_URL || 'https://onethrive-backend-hk76.vercel.app';
     } else {
       return import.meta.env.VITE_API_URL || 'http://localhost:3001';
     }
