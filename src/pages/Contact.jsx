@@ -112,7 +112,7 @@ const Contact = () => {
       // In production, try to use environment variable first
       return process.env.REACT_APP_API_URL || 
              // Fallback to your Vercel backend URL
-             'https://onethrive-backend-hk76.vercel.app';
+             'https://profound-puffpuff-bd670c.netlify.app';
     } else {
       // Development environment
       return process.env.REACT_APP_API_URL || 'http://localhost:3001';
