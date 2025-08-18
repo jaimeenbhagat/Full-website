@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 import { CheckCircle, AlertCircle, Calculator, TrendingUp, Users, DollarSign } from "lucide-react";
@@ -597,14 +599,14 @@ export default function EngagementCalculatorForm() {
               <div className="space-y-6">
                 <div className="bg-black bg-opacity-30 rounded-xl pl-4 pt-4">
                   <div className="flex justify-between items-center mb-2">
-                    <span className="text-white font-bold">Annual Disengagement Cost:</span>
+                    <span className="text-red-400 font-bold">Annual Disengagement Cost:</span>
                     <span className="text-red-400 font-bold text-lg">{formatINR(roiData.totalDisengagementCost)}</span>
                   </div>
                 </div>
                 
                 <div className="bg-black bg-opacity-30 rounded-xl pl-4 pt-4">
                   <div className="flex justify-between items-center mb-2">
-                    <span className="text-white font-bold">Annual Turnover Cost:</span>
+                    <span className="text-[#00FFAB] font-bold">Annual Turnover Cost:</span>
                     <span className="text-[#00FFAB] font-bold text-lg">{formatINR(roiData.totalTurnoverCost)}</span>
                   </div>
                 </div>
@@ -612,8 +614,8 @@ export default function EngagementCalculatorForm() {
                 <div className="bg-black bg-opacity-30 rounded-xl pl-4 pt-4">
                   <div className="flex justify-between items-center mb-2">
                     <div>
-                      <div className="text-white font-bold">Potential Revenue Boost:</div>
-                      <div className="text-gray-400 text-sm">From improved engagement</div>
+                      <div className="text-[#00FFAB] font-bold">Potential Revenue Boost:</div>
+                      <div className="text-[#00FFAB] text-sm">From improved engagement</div>
                     </div>
                     <div className="text-right">
                       <div className="text-[#00FFAB] font-bold text-lg">
@@ -626,8 +628,8 @@ export default function EngagementCalculatorForm() {
                 <div className="bg-black bg-opacity-30 rounded-xl pl-4 pt-4">
                   <div className="flex justify-between items-center mb-3">
                     <div>
-                      <div className="text-white font-bold">Annual Savings Potential:</div>
-                      <div className="text-gray-400 text-sm">By improving engagement 1-2 points</div>
+                      <div className="text-[#00FFAB] font-bold">Annual Savings Potential:</div>
+                      <div className="text-[#00FFAB] text-sm">By improving engagement 1-2 points</div>
                     </div>
                     <div className="text-right">
                       <div className="text-[#00FFAB] font-bold text-lg">

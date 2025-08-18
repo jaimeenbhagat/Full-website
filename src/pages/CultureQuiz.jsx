@@ -490,23 +490,24 @@ const CultureQuiz = () => {
           </div>
         )}
 
+
         {showResults && (
           // Results Section
-          <section className="text-center bg-black p-6 rounded-2xl border border-white/20 flex-1 overflow-y-auto">
+          <section className="text-center bg-gradient-to-br from-black via-[#0D1F1C] to-black p-8 rounded-2xl border border-[#00FFAB]/30 shadow-2xl flex-1 overflow-y-auto relative">
             {/* Status Messages */}
             {submitStatus === "success" && (
-              <div className="bg-[#00FFAB]/10 border border-[#00FFAB] rounded-lg p-4 flex items-center gap-3 mb-6">
+              <div className="bg-[#00FFAB]/15 border border-[#00FFAB] rounded-lg p-4 flex items-center gap-3 mb-6 animate-fadein">
                 <CheckCircle className="text-[#00FFAB] w-5 h-5" />
-                <span className="text-[#00FFAB] font-semibold text-sm">
+                <span className="text-[#00FFAB] font-semibold text-sm drop-shadow-lg">
                   Assessment submitted successfully! Thank you for your participation.
                 </span>
               </div>
             )}
 
             {submitStatus === "error" && (
-              <div className="bg-red-900/20 border border-red-400 rounded-lg p-4 flex items-center gap-3 mb-6">
+              <div className="bg-red-900/20 border border-red-400 rounded-lg p-4 flex items-center gap-3 mb-6 animate-fadein">
                 <AlertCircle className="text-red-400 w-5 h-5" />
-                <span className="text-red-400 font-semibold text-sm">
+                <span className="text-red-400 font-semibold text-sm drop-shadow-lg">
                   Submission failed, but your results are still valid and accurate!
                 </span>
               </div>
@@ -514,65 +515,96 @@ const CultureQuiz = () => {
 
             {/* Results Header */}
             <div className="mb-8">
-              <h2 className="text-xl md:text-2xl font-bold text-white mb-3">
-                Your Company Culture Assessment
+              <h2 className="text-2xl md:text-3xl font-extrabold text-white mb-2 tracking-tight drop-shadow-sm">
+                <span>Your Company</span>
+                <span className="block text-[#00FFAB] text-4xl mt-1">Culture Assessment</span>
               </h2>
               <div
-            className="w-72 h-1 bg-gradient-to-r from-transparent via-[#00FFAB] to-transparent mx-auto mb-2 "
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ delay: 0.3, duration: 1 }}
-          />
-                        <p className="text-3xl md:text-4xl font-bold text-[#00FFAB] mb-3 leading-tight">
+                className="w-72 h-1 bg-gradient-to-r from-transparent via-[#00FFAB] to-transparent mx-auto mb-2"
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ delay: 0.3, duration: 1 }}
+              />
+              <p className="text-3xl md:text-4xl font-extrabold text-[#00FFAB] mb-3 leading-tight drop-shadow-lg">
                 {cultureResult.level}
+              </p>
+              <p className="text-white/75 font-medium text-base max-w-xl mx-auto">
+                {cultureResult.headline || "Here's your unique culture score and insights!"}
               </p>
             </div>
 
-            {/* Score Display */}
-            <div className="mb-8 mx-auto w-32 h-32 relative">
-              <div className="w-full h-full rounded-full bg-black flex items-center justify-center border-2 border-[#00FFAB] shadow-lg">
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-[#00FFAB] mb-1">
-                    {Math.round((totalScore / (totalQuestions * 14)) * 100)}%
-                  </div>
-                  <div className="text-xs text-white font-semibold uppercase tracking-wide">
-                    Score
-                  </div>
-                  <div className="text-xs text-white/70 font-medium">
-                    {totalScore} / {totalQuestions * 14}
-                  </div>
+            {/* Score Display - Animated Circular Progress */}
+            <div className="mx-auto mb-8 w-36 h-36 relative flex items-center justify-center">
+              <div className="absolute inset-0 flex items-center justify-center">
+                <svg className="w-full h-full" viewBox="0 0 120 120">
+                  <circle
+                    cx="60"
+                    cy="60"
+                    r="52"
+                    stroke="#333"
+                    strokeWidth="10"
+                    fill="none"
+                  />
+                  <circle
+                    cx="60"
+                    cy="60"
+                    r="52"
+                    stroke="#00FFAB"
+                    strokeWidth="10"
+                    fill="none"
+                    strokeDasharray={2 * Math.PI * 52}
+                    strokeDashoffset={
+                      2 * Math.PI * 52 * (1 - (totalScore / (totalQuestions * 14)))
+                    }
+                    style={{ transition: "stroke-dashoffset 1s" }}
+                  />
+                </svg>
+              </div>
+              <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <div className="text-3xl font-extrabold text-[#00FFAB] mb-1 drop-shadow-lg">
+                  {Math.round((totalScore / (totalQuestions * 14)) * 100)}%
+                </div>
+                <div className="text-xs text-white font-semibold uppercase tracking-wide">
+                  Score
+                </div>
+                <div className="text-xs text-white/70 font-medium">
+                  {totalScore} / {totalQuestions * 14}
                 </div>
               </div>
             </div>
 
-            {/* Result Description */}
-            <div className="text-sm text-white font-medium max-w-2xl mx-auto mb-8 space-y-4">
+            {/* Result Description - Card Grid */}
+            <div className="text-base text-white/90 font-medium max-w-3xl mx-auto mb-8 grid gap-5 md:grid-cols-2">
               {cultureResult.description.map((point, index) => (
-                <div key={index} className="p-4 bg-black rounded-lg border border-white/20 text-left">
+                <div
+                  key={index}
+                  className="p-5 bg-gradient-to-tr from-black via-[#00FFAB]/10 to-black rounded-xl border border-[#00FFAB]/20 text-left shadow-md hover:scale-[1.03] transition-transform duration-200"
+                >
                   <p className="leading-relaxed">{point}</p>
                 </div>
               ))}
             </div>
 
-            <div className="mb-8 p-4 bg-[#00FFAB]/10 rounded-lg border border-[#00FFAB]/30">
+            {/* CTA Section */}
+            <div className="mb-8 px-6 py-5 bg-[#00FFAB]/15 rounded-xl border border-[#00FFAB]/30 shadow-lg max-w-2xl mx-auto text-center">
               <p
-                className="text-sm text-white font-semibold leading-relaxed"
+                className="text-base text-white font-semibold leading-relaxed"
                 dangerouslySetInnerHTML={{ __html: cultureResult.cta }}
               />
             </div>
 
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-4">
               <button
                 onClick={handleRetakeQuiz}
-                className="bg-black text-white font-semibold py-2 px-6 rounded-lg text-sm hover:bg-white/30 transition-all duration-200 border border-white/30 hover:border-white/50"
+                className="bg-black text-white font-semibold py-2 px-7 rounded-lg text-base hover:bg-[#00FFAB]/10 transition-all duration-200 border border-[#00FFAB]/30 hover:border-[#00FFAB] focus:ring-2 focus:ring-[#00FFAB]"
               >
                 Retake Assessment
               </button>
               
               <button
                 onClick={copyResultToClipboard}
-                className="bg-black text-white font-semibold py-2 px-6 rounded-lg text-sm hover:bg-white/30 transition-all duration-200 border border-white/30 hover:border-white/50"
+                className="bg-black text-white font-semibold py-2 px-7 rounded-lg text-base hover:bg-[#00FFAB]/10 transition-all duration-200 border border-[#00FFAB]/30 hover:border-[#00FFAB] focus:ring-2 focus:ring-[#00FFAB]"
               >
                 Share Results
               </button>
@@ -581,7 +613,7 @@ const CultureQuiz = () => {
                 href="https://onethrive.in/contact"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group bg-[#00FFAB] text-black font-bold py-3 px-6 rounded-lg text-sm inline-flex items-center hover:bg-white transition-all duration-200 shadow-lg"
+                className="group bg-[#00FFAB] text-black font-bold py-3 px-8 rounded-lg text-base inline-flex items-center hover:bg-white transition-all duration-200 shadow-lg border border-[#00FFAB]/50 focus:ring-2 focus:ring-[#00FFAB]"
               >
                 <Trophy className="w-4 h-4 mr-2" />
                 Transform Your Culture
