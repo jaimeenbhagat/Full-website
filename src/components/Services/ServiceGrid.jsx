@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/rules-of-hooks */
 import React, { useRef, useState, useEffect } from "react";
 
@@ -242,7 +241,7 @@ const ServiceGrid = ({ services, serviceCategories, onServiceClick }) => {
 
         return (
           <div key={categoryId} className="space-y-4 md:space-y-6">
-            {/* Category Header */}
+            {/* Category Header with Arrows */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 mb-4 md:mb-6 px-4 sm:px-0">
               <div className="bg-gradient-to-r from-[#00FFAB] to-green-400 p-2 md:p-3 rounded-xl">
                 <div className="w-5 h-8 md:w-6 md:h-6 bg-black rounded flex items-center justify-center">
@@ -254,6 +253,39 @@ const ServiceGrid = ({ services, serviceCategories, onServiceClick }) => {
                 <p className="text-gray-400 text-xs sm:text-sm lg:text-base">{categoryData.description}</p>
               </div>
               <div className="hidden md:block flex-1 h-px bg-gradient-to-r from-[#00FFAB] to-transparent"></div>
+              
+              {/* Navigation Arrows - positioned after the line */}
+              {!isExpanded && (
+                <div className="flex items-center gap-2">
+                  {/* Left Arrow */}
+                  <button
+                    onClick={() => scrollLeft(categoryId)}
+                    disabled={!canScrollLeft[categoryId]}
+                    className={`bg-black bg-opacity-90 hover:bg-opacity-100 text-[#00FFAB] rounded-full p-2 md:p-3 transition-all duration-300 hover:scale-110 shadow-xl border border-[#00FFAB] border-opacity-30 ${
+                      !canScrollLeft[categoryId] ? 'opacity-30 cursor-not-allowed' : 'hover:border-opacity-60'
+                    }`}
+                    aria-label="Scroll left"
+                  >
+                    <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </button>
+
+                  {/* Right Arrow */}
+                  <button
+                    onClick={() => scrollRight(categoryId)}
+                    disabled={!canScrollRight[categoryId]}
+                    className={`bg-black bg-opacity-90 hover:bg-opacity-100 text-[#00FFAB] rounded-full p-2 md:p-3 transition-all duration-300 hover:scale-110 shadow-xl border border-[#00FFAB] border-opacity-30 ${
+                      !canScrollRight[categoryId] ? 'opacity-30 cursor-not-allowed' : 'hover:border-opacity-60'
+                    }`}
+                    aria-label="Scroll right"
+                  >
+                    <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* Services Container */}
@@ -261,32 +293,6 @@ const ServiceGrid = ({ services, serviceCategories, onServiceClick }) => {
               {/* Carousel View (when not expanded) */}
               {!isExpanded ? (
                 <>
-                  {/* Left Arrow */}
-                  {canScrollLeft[categoryId] && (
-                    <button
-                      onClick={() => scrollLeft(categoryId)}
-                      className="absolute left-0 top-1/2 transform -translate-y-1/2 z-20 bg-black bg-opacity-90 hover:bg-opacity-100 text-[#00FFAB] rounded-r-full p-3 md:p-4 transition-all duration-300 hover:scale-110 shadow-xl border-r border-[#00FFAB] border-opacity-30"
-                      aria-label="Scroll left"
-                    >
-                      <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                      </svg>
-                    </button>
-                  )}
-
-                  {/* Right Arrow */}
-                  {canScrollRight[categoryId] && (
-                    <button
-                      onClick={() => scrollRight(categoryId)}
-                      className="absolute right-0 top-1/2 transform -translate-y-1/2 z-20 bg-black bg-opacity-90 hover:bg-opacity-100 text-[#00FFAB] rounded-l-full p-3 md:p-4 transition-all duration-300 hover:scale-110 shadow-xl border-l border-[#00FFAB] border-opacity-30"
-                      aria-label="Scroll right"
-                    >
-                      <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </button>
-                  )}
-
                   {/* Horizontal Scrolling Container - Show first 6 items */}
                   <div
                     ref={(el) => {
@@ -380,4 +386,4 @@ const ServiceGrid = ({ services, serviceCategories, onServiceClick }) => {
   );
 };
 
-export default ServiceGrid; 
+export default ServiceGrid;
