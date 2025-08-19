@@ -15,22 +15,7 @@ textarea:focus {
   outline: none;
 }
 
-.activity-scroll-x {
-  overflow-x: hidden;
-  overflow-y: visible;
-  transition: overflow 0.3s;
-}
-.activity-scroll-x:hover {
-  overflow-x: auto;
-}
-/* Optionally, hide the scrollbar for webkit browsers except on hover */
-.activity-scroll-x::-webkit-scrollbar {
-  height: 0px;
-  transition: height 0.3s;
-}
-.activity-scroll-x:hover::-webkit-scrollbar {
-  height: 8px;
-}
+
 
 /* Scrollbar customization (optional, for dark theme aesthetics) */
 ::-webkit-scrollbar {
