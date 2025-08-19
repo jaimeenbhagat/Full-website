@@ -62,30 +62,9 @@ const ServiceGrid = ({ services, serviceCategories, onServiceClick }) => {
 
   // State: expanded/collapsed for each category and scroll refs
   const [expandedCategories, setExpandedCategories] = useState({});
-  const [scrollPositions, setScrollPositions] = useState({});
   const [canScrollLeft, setCanScrollLeft] = useState({});
   const [canScrollRight, setCanScrollRight] = useState({});
   const scrollRefs = useRef({});
-  const timerRef = useRef({});
-
-  // Auto expand after 5s if not expanded
-  useEffect(() => {
-    Object.keys(servicesByCategory).forEach((categoryId) => {
-      if (
-        servicesByCategory[categoryId].length > 4 &&
-        !expandedCategories[categoryId]
-      ) {
-        timerRef.current[categoryId] = setTimeout(() => {
-          setExpandedCategories((prev) => ({ ...prev, [categoryId]: true }));
-        }, 5000);
-      }
-    });
-
-    return () => {
-      Object.values(timerRef.current).forEach(clearTimeout);
-    };
-    // eslint-disable-next-line
-  }, [servicesByCategory, expandedCategories]);
 
   // Check scroll ability for arrows
   const checkScrollability = (categoryId) => {
@@ -95,20 +74,36 @@ const ServiceGrid = ({ services, serviceCategories, onServiceClick }) => {
     const canLeft = container.scrollLeft > 0;
     const canRight = container.scrollLeft < (container.scrollWidth - container.clientWidth);
 
-    setCanScrollLeft(prev => ({ ...prev, [categoryId]: canLeft }));
-    setCanScrollRight(prev => ({ ...prev, [categoryId]: canRight }));
+    setCanScrollLeft(prev => {
+      if (prev[categoryId] !== canLeft) {
+        return { ...prev, [categoryId]: canLeft };
+      }
+      return prev;
+    });
+    
+    setCanScrollRight(prev => {
+      if (prev[categoryId] !== canRight) {
+        return { ...prev, [categoryId]: canRight };
+      }
+      return prev;
+    });
   };
 
   // Initialize scroll refs and check scrollability
   useEffect(() => {
-    Object.keys(servicesByCategory).forEach((categoryId) => {
-      checkScrollability(categoryId);
-    });
-  }, [servicesByCategory, expandedCategories]);
+    const timeoutId = setTimeout(() => {
+      Object.keys(servicesByCategory).forEach((categoryId) => {
+        if (!expandedCategories[categoryId]) {
+          checkScrollability(categoryId);
+        }
+      });
+    }, 100);
+
+    return () => clearTimeout(timeoutId);
+  }, [Object.keys(servicesByCategory).join(','), Object.keys(expandedCategories).join(',')]);
 
   const handleSeeMore = (categoryId) => {
     setExpandedCategories((prev) => ({ ...prev, [categoryId]: true }));
-    setTimeout(() => checkScrollability(categoryId), 100);
   };
 
   const handleSeeLess = (categoryId) => {
@@ -120,7 +115,7 @@ const ServiceGrid = ({ services, serviceCategories, onServiceClick }) => {
     const container = scrollRefs.current[categoryId];
     if (!container) return;
     
-    const scrollAmount = window.innerWidth < 768 ? 250 : 300; // Mobile vs desktop scroll amount
+    const scrollAmount = window.innerWidth < 768 ? 250 : 300;
     container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
     
     setTimeout(() => checkScrollability(categoryId), 300);
@@ -136,17 +131,114 @@ const ServiceGrid = ({ services, serviceCategories, onServiceClick }) => {
     setTimeout(() => checkScrollability(categoryId), 300);
   };
 
+  // Service Card Component
+  const ServiceCard = ({ service, className = "" }) => {
+    const handleClick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log('Service clicked:', service); // Debug log
+      if (onServiceClick && typeof onServiceClick === 'function') {
+        onServiceClick(service);
+      } else {
+        console.error('onServiceClick is not a function or not provided');
+      }
+    };
+
+    return (
+      <div
+        className={`bg-black rounded-xl md:rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-2xl group relative border border-gray-800 hover:border-[#00FFAB]/50 h-[360px] md:h-[400px] flex flex-col ${className}`}
+        onClick={handleClick}
+      >
+      {/* Service Image */}
+      <div className="relative h-36 md:h-48 bg-gray-900 overflow-hidden flex-shrink-0">
+        <img 
+          src={getServiceImage(service)} 
+          alt={service.title}
+          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+          onError={(e) => {
+            e.target.style.display = 'none';
+            e.target.nextSibling.style.display = 'flex';
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900 hidden items-center justify-center">
+          <div className="w-12 h-12 md:w-16 md:h-16 bg-[#00FFAB] bg-opacity-20 rounded-full flex items-center justify-center">
+            <div className="w-6 h-6 md:w-8 md:h-8 bg-[#00FFAB] rounded-sm"></div>
+          </div>
+        </div>
+        <div className="absolute top-2 md:top-3 left-2 md:left-3 flex gap-2">
+          {service.location.includes('Hybrid') && (
+            <span className="px-1.5 py-0.5 md:px-2 md:py-1 bg-black bg-opacity-70 text-[#00FFAB] text-xs font-medium rounded-full border border-[#00FFAB] border-opacity-30">
+              Hybrid
+            </span>
+          )}
+        </div>
+        <div className="absolute top-2 right-2">
+          <div className="bg-black bg-opacity-80 rounded-full px-2 py-1 md:px-2.5 md:py-1.5 flex items-center gap-1.5 shadow-lg">
+            <div className={`w-1.5 h-1.5 md:w-2 md:h-2 rounded-full ${getDifficultyDot(service.difficulty)}`}></div>
+            <span className={`text-xs font-medium ${getDifficultyColor(service.difficulty)}`}>
+              {service.difficulty}
+            </span>
+          </div>
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
+      </div>
+      
+      <div className="p-2.5 md:p-3 space-y-2 flex-1 flex flex-col">
+        <div className="flex items-center justify-between">
+          <h3 className="text-white font-bold text-base md:text-lg leading-tight line-clamp-2 group-hover:text-[#00FFAB] transition-colors duration-300">
+            {service.title}
+          </h3>
+        </div>
+        
+        <div className="h-8 md:h-10 mb-2 md:mb-4">
+          <p className="text-gray-400 text-xs md:text-sm line-clamp-2 leading-relaxed">
+            {service.subtitle}
+          </p>
+        </div>
+        
+        <div className="h-10 md:h-12 mb-2 md:mb-4 flex flex-col justify-center space-y-1 text-xs md:text-sm text-gray-400">
+          <div className="flex items-center gap-2">
+            <svg className="w-3 h-3 md:w-4 md:h-4 text-[#00FFAB] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span className="truncate">{service.duration}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <svg className="w-3 h-3 md:w-4 md:h-4 text-[#00FFAB] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+            </svg>
+            <span className="truncate">{service.participants} people</span>
+          </div>
+        </div>
+        
+        <div className="flex-1 flex items-end">
+          <div className="w-full h-6 md:h-8 flex flex-wrap gap-1 content-start">
+            {service.skills.slice(0, 2).map((skill, skillIndex) => (
+              <span
+                key={skillIndex}
+                className="text-xs px-1.5 py-0.5 md:px-2 md:py-1 bg-gray-800 bg-opacity-60 text-[#00FFAB] border border-[#00FFAB] border-opacity-30 rounded-full hover:bg-opacity-80 transition-all duration-200 truncate max-w-16 md:max-w-20"
+              >
+                {skill}
+              </span>
+            ))}
+            {service.skills.length > 2 && (
+              <span className="text-xs px-1.5 py-0.5 md:px-2 md:py-1 bg-gray-800 bg-opacity-60 text-[#00FFAB] border border-[#00FFAB] border-opacity-30 rounded-full hover:bg-opacity-80 transition-all duration-200 flex-shrink-0">
+                +{service.skills.length - 2}
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+    );
+  };
+
   return (
     <div className="space-y-8 md:space-y-12">
       {Object.entries(servicesByCategory).map(([categoryId, categoryServices]) => {
         const categoryData = getCategoryData(categoryId);
-        const hasMoreThanFour = categoryServices.length > 4;
+        const hasMoreThanSix = categoryServices.length > 6;
         const isExpanded = !!expandedCategories[categoryId];
-
-        let visibleServices = categoryServices;
-        if (hasMoreThanFour && !isExpanded) {
-          visibleServices = categoryServices.slice(0, 4);
-        }
 
         return (
           <div key={categoryId} className="space-y-4 md:space-y-6">
@@ -164,162 +256,111 @@ const ServiceGrid = ({ services, serviceCategories, onServiceClick }) => {
               <div className="hidden md:block flex-1 h-px bg-gradient-to-r from-[#00FFAB] to-transparent"></div>
             </div>
 
-            {/* Services Container with Arrow Navigation */}
+            {/* Services Container */}
             <div className="relative">
-              {/* Left Arrow - Full Left Side */}
-              {canScrollLeft[categoryId] && (
-                <button
-                  onClick={() => scrollLeft(categoryId)}
-                  className="absolute left-0 top-1/2 transform -translate-y-1/2 z-20 bg-black bg-opacity-90 hover:bg-opacity-100 text-[#00FFAB] rounded-r-full p-3 md:p-4 transition-all duration-300 hover:scale-110 shadow-xl border-r border-[#00FFAB] border-opacity-30"
-                  aria-label="Scroll left"
-                >
-                  <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
-                </button>
-              )}
+              {/* Carousel View (when not expanded) */}
+              {!isExpanded ? (
+                <>
+                  {/* Left Arrow */}
+                  {canScrollLeft[categoryId] && (
+                    <button
+                      onClick={() => scrollLeft(categoryId)}
+                      className="absolute left-0 top-1/2 transform -translate-y-1/2 z-20 bg-black bg-opacity-90 hover:bg-opacity-100 text-[#00FFAB] rounded-r-full p-3 md:p-4 transition-all duration-300 hover:scale-110 shadow-xl border-r border-[#00FFAB] border-opacity-30"
+                      aria-label="Scroll left"
+                    >
+                      <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                      </svg>
+                    </button>
+                  )}
 
-              {/* Right Arrow - Full Right Side */}
-              {canScrollRight[categoryId] && (
-                <button
-                  onClick={() => scrollRight(categoryId)}
-                  className="absolute right-0 top-1/2 transform -translate-y-1/2 z-20 bg-black bg-opacity-90 hover:bg-opacity-100 text-[#00FFAB] rounded-l-full p-3 md:p-4 transition-all duration-300 hover:scale-110 shadow-xl border-l border-[#00FFAB] border-opacity-30"
-                  aria-label="Scroll right"
-                >
-                  <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </button>
-              )}
+                  {/* Right Arrow */}
+                  {canScrollRight[categoryId] && (
+                    <button
+                      onClick={() => scrollRight(categoryId)}
+                      className="absolute right-0 top-1/2 transform -translate-y-1/2 z-20 bg-black bg-opacity-90 hover:bg-opacity-100 text-[#00FFAB] rounded-l-full p-3 md:p-4 transition-all duration-300 hover:scale-110 shadow-xl border-l border-[#00FFAB] border-opacity-30"
+                      aria-label="Scroll right"
+                    >
+                      <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </button>
+                  )}
 
-              {/* Services Grid - Horizontal scroll */}
-              <div
-                ref={(el) => {
-                  scrollRefs.current[categoryId] = el;
-                  if (el) {
-                    el.addEventListener('scroll', () => checkScrollability(categoryId));
-                  }
-                }}
-                className="flex gap-3 md:gap-4 lg:gap-6 overflow-x-auto overflow-y-visible scrollbar-hide pb-2 px-4 sm:px-0"
-                style={{
-                  minHeight: '380px', // Adjusted for mobile
-                  scrollbarWidth: 'none',
-                  msOverflowStyle: 'none',
-                }}
-              >
-                {visibleServices.map((service) => (
+                  {/* Horizontal Scrolling Container - Show first 6 items */}
                   <div
-                    key={service.id}
-                    className="bg-black rounded-xl md:rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-2xl group relative border border-gray-800 hover:border-[#00FFAB]/50 h-[360px] md:h-[400px] min-w-[240px] md:min-w-[280px] w-[240px] md:w-[280px] max-w-[240px] md:max-w-[280px] flex flex-col flex-shrink-0"
-                    onClick={() => onServiceClick(service)}
+                    ref={(el) => {
+                      if (el && scrollRefs.current[categoryId] !== el) {
+                        scrollRefs.current[categoryId] = el;
+                        el.addEventListener('scroll', () => checkScrollability(categoryId), { passive: true });
+                      }
+                    }}
+                    className="flex gap-3 md:gap-4 lg:gap-6 overflow-x-auto overflow-y-visible scrollbar-hide pb-2 px-4 sm:px-0"
+                    style={{
+                      minHeight: '380px',
+                      scrollbarWidth: 'none',
+                      msOverflowStyle: 'none',
+                    }}
                   >
-                    {/* Service Image */}
-                    <div className="relative h-36 md:h-48 bg-gray-900 overflow-hidden flex-shrink-0">
-                      <img 
-                        src={getServiceImage(service)} 
-                        alt={service.title}
-                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                          e.target.nextSibling.style.display = 'flex';
-                        }}
+                    {/* Show first 6 services */}
+                    {categoryServices.slice(0, 6).map((service) => (
+                      <ServiceCard 
+                        key={service.id}
+                        service={service}
+                        className="min-w-[240px] md:min-w-[280px] w-[240px] md:w-[280px] max-w-[240px] md:max-w-[280px] flex-shrink-0"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900 hidden items-center justify-center">
-                        <div className="w-12 h-12 md:w-16 md:h-16 bg-[#00FFAB] bg-opacity-20 rounded-full flex items-center justify-center">
-                          <div className="w-6 h-6 md:w-8 md:h-8 bg-[#00FFAB] rounded-sm"></div>
-                        </div>
-                      </div>
-                      <div className="absolute top-2 md:top-3 left-2 md:left-3 flex gap-2">
-                        {service.location.includes('Hybrid') && (
-                          <span className="px-1.5 py-0.5 md:px-2 md:py-1 bg-black bg-opacity-70 text-[#00FFAB] text-xs font-medium rounded-full border border-[#00FFAB] border-opacity-30">
-                            Hybrid
-                          </span>
-                        )}
-                      </div>
-                      <div className="absolute top-2 right-2">
-                        <div className="bg-black bg-opacity-80 rounded-full px-2 py-1 md:px-2.5 md:py-1.5 flex items-center gap-1.5 shadow-lg">
-                          <div className={`w-1.5 h-1.5 md:w-2 md:h-2 rounded-full ${getDifficultyDot(service.difficulty)}`}></div>
-                          <span className={`text-xs font-medium ${getDifficultyColor(service.difficulty)}`}>
-                            {service.difficulty}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
-                    </div>
-                    
-                    <div className="p-2.5 md:p-3 space-y-2 flex-1 flex flex-col">
-                      <div className="flex items-center justify-between">
-                        <h3 className="text-white font-bold text-base md:text-lg leading-tight line-clamp-2 group-hover:text-[#00FFAB] transition-colors duration-300">
-                          {service.title}
-                        </h3>
-                      </div>
-                      
-                      <div className="h-8 md:h-10 mb-2 md:mb-4">
-                        <p className="text-gray-400 text-xs md:text-sm line-clamp-2 leading-relaxed">
-                          {service.subtitle}
-                        </p>
-                      </div>
-                      
-                      <div className="h-10 md:h-12 mb-2 md:mb-4 flex flex-col justify-center space-y-1 text-xs md:text-sm text-gray-400">
-                        <div className="flex items-center gap-2">
-                          <svg className="w-3 h-3 md:w-4 md:h-4 text-[#00FFAB] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                          </svg>
-                          <span className="truncate">{service.duration}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <svg className="w-3 h-3 md:w-4 md:h-4 text-[#00FFAB] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
-                          </svg>
-                          <span className="truncate">{service.participants} people</span>
-                        </div>
-                      </div>
-                      
-                      <div className="flex-1 flex items-end">
-                        <div className="w-full h-6 md:h-8 flex flex-wrap gap-1 content-start">
-                          {service.skills.slice(0, 2).map((skill, skillIndex) => (
-                            <span
-                              key={skillIndex}
-                              className="text-xs px-1.5 py-0.5 md:px-2 md:py-1 bg-gray-800 bg-opacity-60 text-[#00FFAB] border border-[#00FFAB] border-opacity-30 rounded-full hover:bg-opacity-80 transition-all duration-200 truncate max-w-16 md:max-w-20"
-                            >
-                              {skill}
-                            </span>
-                          ))}
-                          {service.skills.length > 2 && (
-                            <span className="text-xs px-1.5 py-0.5 md:px-2 md:py-1 bg-gray-800 bg-opacity-60 text-[#00FFAB] border border-[#00FFAB] border-opacity-30 rounded-full hover:bg-opacity-80 transition-all duration-200 flex-shrink-0">
-                              +{service.skills.length - 2}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                    ))}
 
-                {/* See More/See Less Card */}
-                {hasMoreThanFour && !isExpanded && (
-                  <div
-                    key="see-more"
-                    className="bg-gradient-to-br from-[#00FFAB] to-green-400 rounded-xl md:rounded-2xl flex items-center justify-center cursor-pointer h-[360px] md:h-[400px] min-w-[240px] md:min-w-[280px] w-[240px] md:w-[280px] max-w-[240px] md:max-w-[280px] border border-gray-800 hover:border-[#00FFAB]/50 transition-all duration-300 hover:scale-105 flex-shrink-0"
-                    onClick={() => handleSeeMore(categoryId)}
-                  >
-                    <span className="text-black font-bold text-base md:text-lg">
-                      See More...
-                    </span>
+                    {/* See More Card */}
+                    {hasMoreThanSix && (
+                      <div
+                        key="see-more"
+                        className="bg-gradient-to-br from-[#00FFAB] to-green-400 rounded-xl md:rounded-2xl flex items-center justify-center cursor-pointer h-[360px] md:h-[400px] min-w-[240px] md:min-w-[280px] w-[240px] md:w-[280px] max-w-[240px] md:max-w-[280px] border border-gray-800 hover:border-[#00FFAB]/50 transition-all duration-300 hover:scale-105 flex-shrink-0"
+                        onClick={() => handleSeeMore(categoryId)}
+                      >
+                        <div className="text-center">
+                          <div className="mb-2">
+                            <svg className="w-8 h-8 md:w-10 md:h-10 text-black mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                          </div>
+                          <span className="text-black font-bold text-base md:text-lg">
+                            See All
+                          </span>
+                          <p className="text-black text-xs md:text-sm mt-1 opacity-80">
+                            {categoryServices.length - 6} more activities
+                          </p>
+                        </div>
+                      </div>
+                    )}
                   </div>
-                )}
-                {hasMoreThanFour && isExpanded && (
-                  <div
-                    key="see-less"
-                    className="bg-gradient-to-br from-[#00FFAB] to-green-400 rounded-xl md:rounded-2xl flex items-center justify-center cursor-pointer h-[360px] md:h-[400px] min-w-[240px] md:min-w-[280px] w-[240px] md:w-[280px] max-w-[240px] md:max-w-[280px] border border-gray-800 hover:border-[#00FFAB]/50 transition-all duration-300 hover:scale-105 flex-shrink-0"
-                    onClick={() => handleSeeLess(categoryId)}
-                  >
-                    <span className="text-black font-bold text-base md:text-lg">
-                      See Less...
-                    </span>
+                </>
+              ) : (
+                /* Grid View (when expanded) */
+                <div className="px-4 sm:px-0">
+                  {/* Grid Layout - 4 columns on desktop, responsive on mobile */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 mb-6">
+                    {categoryServices.map((service) => (
+                      <ServiceCard key={service.id} service={service} />
+                    ))}
                   </div>
-                )}
-              </div>
+
+                  {/* See Less Button */}
+                  <div className="flex justify-center">
+                    <button
+                      onClick={() => handleSeeLess(categoryId)}
+                      className="bg-gradient-to-r from-[#00FFAB] to-green-400 text-black font-bold py-3 px-8 md:py-4 md:px-12 rounded-xl hover:scale-105 transition-all duration-300 shadow-lg border border-gray-800 hover:border-[#00FFAB]/50"
+                    >
+                      <div className="flex items-center gap-2">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                        </svg>
+                        <span>Show Less</span>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         );
@@ -339,4 +380,4 @@ const ServiceGrid = ({ services, serviceCategories, onServiceClick }) => {
   );
 };
 
-export default ServiceGrid;
+export default ServiceGrid; 
