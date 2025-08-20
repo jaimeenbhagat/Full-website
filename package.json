@@ -9,6 +9,9 @@
     "lint": "eslint .",
     "preview": "vite preview"
   },
+  "rules": {
+      "no-unused-vars": "off"
+  },
   "dependencies": {
     "@react-three/drei": "^10.1.2",
     "@react-three/fiber": "^9.1.2",

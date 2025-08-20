@@ -1,7 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useRef } from "react";
-import { CheckCircle, AlertCircle, Mail, Trophy, Target, ArrowRight } from "lucide-react";
+import {
+  CheckCircle,
+  AlertCircle,
+  Mail,
+  Trophy,
+  Target,
+  ArrowRight,
+} from "lucide-react";
 import { quizData } from "../components/CultureQuiz/quizData";
 import { getCultureLevel } from "../components/CultureQuiz/getCultureLevel";
 
@@ -111,10 +118,12 @@ const CultureQuiz = () => {
 
   // API URL function
   const getApiUrl = () => {
-    if (import.meta.env.MODE === 'production') {
-      return import.meta.env.VITE_API_URL || 'https://onethrive-backend.onrender.com';
+    if (import.meta.env.MODE === "production") {
+      return (
+        import.meta.env.VITE_API_URL || "https://onethrive-backend.onrender.com"
+      );
     } else {
-      return import.meta.env.VITE_API_URL || 'http://localhost:3001';
+      return import.meta.env.VITE_API_URL || "http://localhost:3001";
     }
   };
 
@@ -125,7 +134,9 @@ const CultureQuiz = () => {
     // Email validation
     if (!userEmail.trim()) {
       errors.email = "Email is required";
-    } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(userEmail)) {
+    } else if (
+      !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(userEmail)
+    ) {
       errors.email = "Please enter a valid email address";
     }
 
@@ -152,11 +163,11 @@ const CultureQuiz = () => {
 
     try {
       const cultureResult = getCultureLevel(totalScore);
-      
+
       // Prepare complete submission data (email + quiz results together)
       const submissionData = {
         email: userEmail,
-        quizType: 'culture_quiz',
+        quizType: "culture_quiz",
         totalScore: totalScore,
         totalQuestions: totalQuestions,
         maxPossibleScore: totalQuestions * 14,
@@ -164,7 +175,7 @@ const CultureQuiz = () => {
         answers: answers,
         cultureLevel: cultureResult, // Corrected key name
         completedAt: new Date().toISOString(),
-        submittedAt: new Date().toISOString()
+        submittedAt: new Date().toISOString(),
       };
 
       console.log("Submitting complete culture quiz data:", submissionData);
@@ -172,7 +183,7 @@ const CultureQuiz = () => {
       // Get API URL based on environment
       const API_URL = getApiUrl();
       console.log("Using API URL:", API_URL);
-      
+
       // SINGLE API CALL to the correct endpoint
       const response = await fetch(`${API_URL}/api/culture-quiz-results`, {
         method: "POST",
@@ -263,9 +274,7 @@ const CultureQuiz = () => {
     const messageBox = document.createElement("div");
     messageBox.textContent = message;
     messageBox.className = `fixed bottom-16 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded-lg shadow-lg opacity-0 transition-all duration-300 z-50 font-medium text-sm ${
-      type === "success" 
-        ? "bg-[#00FFAB] text-black" 
-        : "bg-red-600 text-white"
+      type === "success" ? "bg-[#00FFAB] text-black" : "bg-red-600 text-white"
     }`;
     document.body.appendChild(messageBox);
     setTimeout(() => {
@@ -281,16 +290,20 @@ const CultureQuiz = () => {
   const handleEmailChange = (e) => {
     setUserEmail(e.target.value);
     if (validationErrors.email) {
-      setValidationErrors(prev => ({
+      setValidationErrors((prev) => ({
         ...prev,
-        email: null
+        email: null,
       }));
     }
   };
 
   const inputClasses = (fieldName) => `
     w-full p-3 rounded-lg bg-black border text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-[#00FFAB] transition-all duration-200 font-medium text-sm
-    ${validationErrors[fieldName] ? 'border-red-500 focus:border-red-500 focus:ring-red-400' : 'border-white/30 focus:border-[#00FFAB]'}
+    ${
+      validationErrors[fieldName]
+        ? "border-red-500 focus:border-red-500 focus:ring-red-400"
+        : "border-white/30 focus:border-[#00FFAB]"
+    }
   `;
 
   return (
@@ -306,16 +319,17 @@ const CultureQuiz = () => {
                 <span className="block text-[#00FFAB] mt-1">Culture Pulse</span>
               </h1>
               <div
-            className="w-72 h-1 bg-gradient-to-r from-transparent via-[#00FFAB] to-transparent mx-auto mb-2 "
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ delay: 0.3, duration: 1 }}
-          />
+                className="w-72 h-1 bg-gradient-to-r from-transparent via-[#00FFAB] to-transparent mx-auto mb-2 "
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ delay: 0.3, duration: 1 }}
+              />
             </div>
-            
+
             <p className="text-lg text-white/90 font-medium mb-8 max-w-2xl mx-auto leading-relaxed">
-              Uncover the true essence of your workplace culture with our comprehensive assessment. 
-              Your insights will help create a more thriving, innovative environment for everyone.
+              Uncover the true essence of your workplace culture with our
+              comprehensive assessment. Your insights will help create a more
+              thriving, innovative environment for everyone.
             </p>
 
             <div className="space-y-4">
@@ -326,9 +340,10 @@ const CultureQuiz = () => {
                 Begin Assessment
                 <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-0.5 transition-transform duration-200" />
               </button>
-              
+
               <p className="text-white/70 text-xs font-medium">
-                ✓ Anonymous & Confidential  ✓ Takes 5-7 minutes  ✓ Professional Insights
+                ✓ Anonymous & Confidential ✓ Takes 5-7 minutes ✓ Professional
+                Insights
               </p>
             </div>
           </section>
@@ -345,7 +360,9 @@ const CultureQuiz = () => {
                     <Trophy className="w-4 h-4 text-[#00FFAB]" />
                   </div>
                   <div>
-                    <h2 className="text-sm font-bold text-white">Culture Assessment</h2>
+                    <h2 className="text-sm font-bold text-white">
+                      Culture Assessment
+                    </h2>
                     <p className="text-xs text-white/70 font-medium">
                       Question {answeredCount} of {totalQuestions}
                     </p>
@@ -358,7 +375,7 @@ const CultureQuiz = () => {
                   <p className="text-xs text-white/70">Complete</p>
                 </div>
               </div>
-              
+
               <div className="relative w-full bg-white/20 rounded-full h-2">
                 <div
                   className="bg-[#00FFAB] h-2 rounded-full transition-all duration-500"
@@ -387,11 +404,13 @@ const CultureQuiz = () => {
                   >
                     {/* Question Header */}
                     <div className="flex items-center space-x-3 mb-4">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-200 ${
-                        answers[q.id] !== undefined
-                          ? "bg-[#00FFAB] text-black"
-                          : "bg-white/20 text-white border border-white/30"
-                      }`}>
+                      <div
+                        className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-200 ${
+                          answers[q.id] !== undefined
+                            ? "bg-[#00FFAB] text-black"
+                            : "bg-white/20 text-white border border-white/30"
+                        }`}
+                      >
                         {answers[q.id] !== undefined ? (
                           <CheckCircle className="w-4 h-4" />
                         ) : (
@@ -403,17 +422,22 @@ const CultureQuiz = () => {
                           Question {index + 1}
                         </p>
                         {answers[q.id] !== undefined && (
-                          <p className="text-xs text-[#00FFAB] font-medium">Completed</p>
+                          <p className="text-xs text-[#00FFAB] font-medium">
+                            Completed
+                          </p>
                         )}
                       </div>
                     </div>
 
                     {/* Question Text */}
-                    <h3 className={`text-lg md:text-xl font-bold mb-5 leading-tight transition-colors duration-200 ${
-                      q.id === firstUnansweredQuestionId && answers[q.id] === undefined
-                        ? "text-[#00FFAB]"
-                        : "text-white"
-                    }`}>
+                    <h3
+                      className={`text-lg md:text-xl font-bold mb-5 leading-tight transition-colors duration-200 ${
+                        q.id === firstUnansweredQuestionId &&
+                        answers[q.id] === undefined
+                          ? "text-[#00FFAB]"
+                          : "text-white"
+                      }`}
+                    >
                       {q.question}
                     </h3>
 
@@ -433,13 +457,15 @@ const CultureQuiz = () => {
                             <span className="leading-relaxed pr-3">
                               {option.text}
                             </span>
-                            <div className={`w-4 h-4 rounded-full border flex items-center justify-center transition-all duration-200 ${
-                              answers[q.id] === option.score
-                                ? "border-[#00FFAB] bg-[#00FFAB]"
-                                : "border-white/40 group-hover:border-[#00FFAB]"
-                            }`}>
+                            <div
+                              className={`w-3 h-3 md:w-4 md:h-4 rounded-full border flex items-center justify-center flex-shrink-0 transition-all duration-200 ${
+                                answers[q.id] === option.score
+                                  ? "border-[#00FFAB] bg-[#00FFAB]"
+                                  : "border-white/40 group-hover:border-[#00FFAB]"
+                              }`}
+                            >
                               {answers[q.id] === option.score && (
-                                <div className="w-1.5 h-1.5 bg-black rounded-full"></div>
+                                <div className="w-1 h-1 md:w-1.5 md:h-1.5 bg-black rounded-full"></div>
                               )}
                             </div>
                           </div>
@@ -453,8 +479,12 @@ const CultureQuiz = () => {
               {/* Submit Section */}
               <div className="text-center mt-10 p-6 bg-white/5 rounded-lg border border-white/20">
                 <div className="mb-4">
-                  <h3 className="text-lg font-bold text-white mb-1">Ready to Discover Your Results?</h3>
-                  <p className="text-white/70 font-medium text-sm">Complete your culture assessment journey</p>
+                  <h3 className="text-lg font-bold text-white mb-1">
+                    Ready to Discover Your Results?
+                  </h3>
+                  <p className="text-white/70 font-medium text-sm">
+                    Complete your culture assessment journey
+                  </p>
                 </div>
 
                 <button
@@ -492,7 +522,6 @@ const CultureQuiz = () => {
           </div>
         )}
 
-
         {showResults && (
           // Results Section
           <section className="text-center bg-gradient-to-br from-black via-[#0D1F1C] to-black p-8 rounded-2xl border border-[#00FFAB]/30 shadow-2xl flex-1 overflow-y-auto relative">
@@ -501,7 +530,8 @@ const CultureQuiz = () => {
               <div className="bg-[#00FFAB]/15 border border-[#00FFAB] rounded-lg p-4 flex items-center gap-3 mb-6 animate-fadein">
                 <CheckCircle className="text-[#00FFAB] w-5 h-5" />
                 <span className="text-[#00FFAB] font-semibold text-sm drop-shadow-lg">
-                  Assessment submitted successfully! Thank you for your participation.
+                  Assessment submitted successfully! Thank you for your
+                  participation.
                 </span>
               </div>
             )}
@@ -510,7 +540,8 @@ const CultureQuiz = () => {
               <div className="bg-red-900/20 border border-red-400 rounded-lg p-4 flex items-center gap-3 mb-6 animate-fadein">
                 <AlertCircle className="text-red-400 w-5 h-5" />
                 <span className="text-red-400 font-semibold text-sm drop-shadow-lg">
-                  Submission failed, but your results are still valid and accurate!
+                  Submission failed, but your results are still valid and
+                  accurate!
                 </span>
               </div>
             )}
@@ -519,7 +550,9 @@ const CultureQuiz = () => {
             <div className="mb-8">
               <h2 className="text-2xl md:text-3xl font-extrabold text-white mb-2 tracking-tight drop-shadow-sm">
                 <span>Your Company</span>
-                <span className="block text-[#00FFAB] text-4xl mt-1">Culture Assessment</span>
+                <span className="block text-[#00FFAB] text-4xl mt-1">
+                  Culture Assessment
+                </span>
               </h2>
               <div
                 className="w-72 h-1 bg-gradient-to-r from-transparent via-[#00FFAB] to-transparent mx-auto mb-2"
@@ -531,7 +564,8 @@ const CultureQuiz = () => {
                 {cultureResult.level}
               </p>
               <p className="text-white/75 font-medium text-base max-w-xl mx-auto">
-                {cultureResult.headline || "Here's your unique culture score and insights!"}
+                {cultureResult.headline ||
+                  "Here's your unique culture score and insights!"}
               </p>
             </div>
 
@@ -556,7 +590,10 @@ const CultureQuiz = () => {
                     fill="none"
                     strokeDasharray={2 * Math.PI * 52}
                     strokeDashoffset={
-                      2 * Math.PI * 52 * (1 - (totalScore / (totalQuestions * 14)))
+                      2 *
+                      Math.PI *
+                      52 *
+                      (1 - totalScore / (totalQuestions * 14))
                     }
                     style={{ transition: "stroke-dashoffset 1s" }}
                   />
@@ -603,14 +640,14 @@ const CultureQuiz = () => {
               >
                 Retake Assessment
               </button>
-              
+
               <button
                 onClick={copyResultToClipboard}
                 className="bg-black text-white font-semibold py-2 px-7 rounded-lg text-base hover:bg-[#00FFAB]/10 transition-all duration-200 border border-[#00FFAB]/30 hover:border-[#00FFAB] focus:ring-2 focus:ring-[#00FFAB]"
               >
                 Share Results
               </button>
-              
+
               <a
                 href="https://onethrive.in/contact"
                 target="_blank"
@@ -660,7 +697,8 @@ const CultureQuiz = () => {
                 Begin Your Culture Journey
               </h2>
               <p className="text-white/80 text-sm font-medium leading-relaxed">
-                Enter your email to start the assessment and receive your personalized culture insights.
+                Enter your email to start the assessment and receive your
+                personalized culture insights.
               </p>
             </div>
 
@@ -669,10 +707,10 @@ const CultureQuiz = () => {
                 <input
                   type="email"
                   placeholder="Enter your professional email"
-                  className={inputClasses('email')}
+                  className={inputClasses("email")}
                   value={userEmail}
                   onChange={handleEmailChange}
-                  onKeyPress={(e) => e.key === 'Enter' && handleEmailSubmit()}
+                  onKeyPress={(e) => e.key === "Enter" && handleEmailSubmit()}
                 />
                 {validationErrors.email && (
                   <p className="text-red-400 text-sm mt-2 font-medium flex items-center">
@@ -692,7 +730,7 @@ const CultureQuiz = () => {
 
               <div className="text-center">
                 <p className="text-white/60 text-xs font-medium">
-                  ✓ 100% Confidential  ✓ No Spam  ✓ Professional Insights Only
+                  ✓ 100% Confidential ✓ No Spam ✓ Professional Insights Only
                 </p>
               </div>
             </div>

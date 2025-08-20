@@ -509,9 +509,9 @@ export default function EngagementCalculatorForm() {
                   onClick={handleCalculateButtonClick}
                   disabled={!!turnoverInputError}
                 >
-                  <div className="flex items-center justify-center gap-2 sm:gap-3">
-                    <Calculator className="w-5 h-5 sm:w-6 sm:h-6" />
-                    Calculate Your Engagement ROI
+                  <div className="flex items-center justify-center gap-2 p-1 sm:gap-3">
+                    <Calculator className="w-10 h-10 sm:w-6 sm:h-6" />
+                    <div className="text-md">Calculate Your Engagement ROI</div>
                   </div>
                 </button>
               </CardContent>
