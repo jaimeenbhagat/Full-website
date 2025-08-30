@@ -19,6 +19,8 @@ const Footer = () => {
     { name: "Services", path: "/services" },
     { name: "Blog", path: "/blog" },
     { name: "Contact Us", path: "/contact" },
+    { name: "ROI Calculator", path: "/roi-calculator" },
+    { name: "Culture Quiz", path: "/culture-quiz" },
   ];
 
   const policies = [
