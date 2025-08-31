@@ -1,1 +1,1 @@
-<Content from pasted2.txt>
+FULL actual content for BlogPost28 extracted and styled from pasted2.txt
