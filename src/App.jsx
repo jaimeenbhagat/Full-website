@@ -24,10 +24,12 @@ import PrivacyPolicy from './components/Policies/PrivacyPolicy';
 import CancellationRefundPolicy from './components/Policies/CancellationRefundPolicy';
 import TermsConditions from './components/Policies/TermsConditions';
 import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 function App() {
   return (
     <Router>
       <Analytics/>
+      <SpeedInsights/>
       <div className=" text-white font-interphase min-h-screen flex flex-col">
         <Navbar />
         <ScrollToTop />
