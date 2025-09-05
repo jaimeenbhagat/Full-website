@@ -23,10 +23,11 @@ import CultureQuiz from './pages/CultureQuiz'
 import PrivacyPolicy from './components/Policies/PrivacyPolicy';
 import CancellationRefundPolicy from './components/Policies/CancellationRefundPolicy';
 import TermsConditions from './components/Policies/TermsConditions';
-
+import { Analytics } from "@vercel/analytics/next"
 function App() {
   return (
     <Router>
+      <Analytics/>
       <div className=" text-white font-interphase min-h-screen flex flex-col">
         <Navbar />
         <ScrollToTop />

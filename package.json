@@ -10,12 +10,13 @@
     "preview": "vite preview"
   },
   "rules": {
-      "no-unused-vars": "off"
+    "no-unused-vars": "off"
   },
   "dependencies": {
     "@react-three/drei": "^10.1.2",
     "@react-three/fiber": "^9.1.2",
     "@tailwindcss/vite": "^4.1.8",
+    "@vercel/analytics": "^1.5.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "components": "^0.1.0",
