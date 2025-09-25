@@ -1,1 +1,0 @@
-FULL actual content for BlogPost5 extracted and styled from pasted2.txt

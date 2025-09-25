@@ -31,11 +31,6 @@ const Blog = () => {
   return (
     <div>
       <BlogGrid blogs={currentBlogs} onBlogClick={handleBlogClick} />
-      <BlogPagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-      />
     </div>
   );
 };

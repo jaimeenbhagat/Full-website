@@ -1,199 +1,146 @@
-import BlogPost1 from "./BlogPosts/BlogPost1.jsx";
-import BlogPost2 from "./BlogPosts/BlogPost2.jsx";
-import BlogPost3 from "./BlogPosts/BlogPost3.jsx";
-import BlogPost4 from "./BlogPosts/BlogPost4.jsx";
-import BlogPost5 from "./BlogPosts/BlogPost5.jsx";
-import BlogPost6 from "./BlogPosts/BlogPost6.jsx";
-import BlogPost7 from "./BlogPosts/BlogPost7.jsx";
-import BlogPost8 from "./BlogPosts/BlogPost8.jsx";
-import BlogPost9 from "./BlogPosts/BlogPost9.jsx";
-import BlogPost10 from "./BlogPosts/BlogPost10.jsx";
-import BlogPost11 from "./BlogPosts/BlogPost11.jsx";
-import BlogPost12 from "./BlogPosts/BlogPost12.jsx";
-import BlogPost13 from "./BlogPosts/BlogPost13.jsx";
-import BlogPost14 from "./BlogPosts/BlogPost14.jsx";
-import BlogPost15 from "./BlogPosts/BlogPost15.jsx";
-import BlogPost16 from "./BlogPosts/BlogPost16.jsx";
-import BlogPost17 from "./BlogPosts/BlogPost17.jsx";
-import BlogPost18 from "./BlogPosts/BlogPost18.jsx";
-import BlogPost19 from "./BlogPosts/BlogPost19.jsx";
-import BlogPost20 from "./BlogPosts/BlogPost20.jsx";
-import BlogPost21 from "./BlogPosts/BlogPost21.jsx";
-import BlogPost22 from "./BlogPosts/BlogPost22.jsx";
-import BlogPost23 from "./BlogPosts/BlogPost23.jsx";
-import BlogPost24 from "./BlogPosts/BlogPost24.jsx";
-import BlogPost25 from "./BlogPosts/BlogPost25.jsx";
-import BlogPost26 from "./BlogPosts/BlogPost26.jsx";
-import BlogPost27 from "./BlogPosts/BlogPost27.jsx";
-import BlogPost28 from "./BlogPosts/BlogPost28.jsx";
-
-export const blogData = [
+import Blogimage1 from '../../../src/assets/Blogs/Blog1.webp';
+import Blogimage2 from '../../../src/assets/Blogs/Blog2.webp';
+import Blogimage3 from '../../../src/assets/Blogs/Blog3.webp';
+import Blogimage4 from '../../../src/assets/Blogs/Blog4.webp';
+import Blogimage5 from '../../../src/assets/Blogs/Blog5.webp';
+import Blogimage6 from '../../../src/assets/Blogs/Blog6.webp';
+import Blogimage7 from '../../../src/assets/Blogs/Blog7.webp';
+import Blogimage8 from '../../../src/assets/Blogs/Blog8.webp';
+import Blogimage9 from '../../../src/assets/Blogs/Blog9.webp';
+// Importing blog post components
+import BlogPost1 from '../Blog/BlogPosts/BlogPost1'; 
+import BlogPost2 from '../Blog/BlogPosts/BlogPost2';
+import BlogPost3 from '../Blog/BlogPosts/BlogPost3';
+import BlogPost4 from '../Blog/BlogPosts/BlogPost4';
+import BlogPost5 from '../Blog/BlogPosts/BlogPost5';
+import BlogPost6 from '../Blog/BlogPosts/BlogPost6';
+import BlogPost7 from '../Blog/BlogPosts/BlogPost7';
+import BlogPost8 from '../Blog/BlogPosts/BlogPost8';
+import BlogPost9 from '../Blog/BlogPosts/BlogPost9';
+// Sample blog data extracted from the provided PDF
+export const blogs = [
   {
-    title: "20 Virtual Team Building Activities That Actually Boost Remote Morale",
-    slug: "/blog/virtual-team-building-activities",
-    description: "The ultimate guide to boosting remote and hybrid team engagement through curated, actionable virtual team building activities. Includes why it matters, best practices, and 20 ideas.",
-    component: BlogPost1
+    id: 1,
+    title:
+      "Beyond the Trust Fall: Smart Team Building Games That Aren't Cringe (and Actually Work)",
+    category: "Team Building",
+    thumbnail: Blogimage1,
+    excerpt:
+      'The phrase "team building games" can conjure images of awkward icebreakers. However, effective team building games are powerful tools for transforming a group of individual employees into a cohesive, high-performing unit.',
+    author: "OneThrive",
+    readTime: "5 min read",
+    component: BlogPost1,
+    path: "/blogs/beyond-the-trust-fall",
   },
   {
-    title: "Combating Burnout: 7 Corporate Wellness Programs Employees Won't Hate",
-    slug: "/blog/corporate-wellness-programs",
-    description: "How to address burnout and employee disengagement with strategic wellness initiatives. Features 7 effective program types and tips for implementation.",
-    component: BlogPost2
+    id: 2,
+    title:
+      "Unleashing Innovation: How Creative Workshops Spark Employee Engagement",
+    category: "Creative Workshops",
+    thumbnail: Blogimage2,
+    excerpt:
+      "Creative workshops for employees are a powerful solution. Far from being mere recreational activities, these high-impact experiences are strategically designed to unlock untapped potential and build stronger, more collaborative teams.",
+    author: "OneThrive",
+    readTime: "5 min read",
+    component: BlogPost2,
+    path: "/blogs/unleashing-innovation",
   },
   {
-    title: "Unleashing Innovation: How Creative Workshops Spark Employee Engagement",
-    slug: "/blog/creative-workshops-employee-engagement",
-    description: "Discover why creative workshops are essential for modern teams and how they unlock innovation, boost morale, and foster collaboration.",
-    component: BlogPost3
+    id: 3,
+    title:
+      "Measuring What Matters: Quantifying the ROI of Employee Engagement & Experience",
+    category: "Expert-Insights",
+    thumbnail: Blogimage3,
+    excerpt:
+      'Quantifying the ROI of employee engagement and experience is no longer a "nice-to-have" but a strategic imperative, directly impacting budget allocation and business growth.',
+    author: "OneThrive",
+    readTime: "5 min read",
+    component: BlogPost3,
+    path: "/blogs/measuring-what-matters",
   },
   {
-    title: "Planning the Perfect Company Offsite: Maximizing Team Potential and Engagement",
-    slug: "/blog/planning-company-offsite",
-    description: "A comprehensive guide to strategic offsite planning, including benefits, best practices, and engaging retreat ideas for modern organizations.",
-    component: BlogPost4
+    id: 4,
+    title:
+      "Cultivating a Thriving Workplace: Leadership Strategies for Unlocking Employee Engagement",
+    category: "Leadership",
+    thumbnail: Blogimage4,
+    excerpt:
+      'With global employee engagement at a decade low and "quiet quitting" persisting, organizations face a critical challenge: how to inspire, connect, and retain their most valuable asset—their people.',
+    author: "OneThrive",
+    readTime: "5 min read",
+    component: BlogPost4,
+    path: "/blogs/cultivating-a-thriving-workplace",
   },
   {
-    title: "Why Corporate Entertainment is Your Secret Weapon for Employee Satisfaction and Client Loyalty",
-    slug: "/blog/corporate-entertainment-secret-weapon",
-    description: "Explores why entertainment is a strategic investment, not just a perk. Covers benefits, best practices, and engaging ideas for employees and clients.",
-    component: BlogPost5
+    id: 5,
+    title:
+      "Beyond the Bonus: How Strategic Employee Recognition Drives Engagement and Retention",
+    category: "Expert-Insights",
+    thumbnail: Blogimage5,
+    excerpt:
+      "Strategic employee recognition is a vital investment. It's a secret weapon for fostering deep employee engagement and retention.",
+    author: "OneThrive",
+    readTime: "5 min read",
+    component: BlogPost5, 
+    path: "/blogs/beyond-the-bonus",
   },
   {
-    title: "Combating Quiet Quitting: Strategic Solutions for a Re-Engaged Workforce",
-    slug: "/blog/combating-quiet-quitting",
-    description: "Understand the causes and strategic solutions for quiet quitting, including actionable engagement tactics for revitalizing teams.",
-    component: BlogPost6
-  },
-  {
-    title: "Bridging the Distance: Engaging Your Hybrid and Remote Workforce Effectively",
-    slug: "/blog/engaging-hybrid-remote-workforce",
-    description: "Actionable strategies and best practices for building connection, engagement, and well-being in distributed teams.",
-    component: BlogPost7
-  },
-  {
-    title: "Cultivating a Thriving Workplace: Leadership Strategies for Unlocking Employee Engagement",
-    slug: "/blog/thriving-workplace-leadership-strategies",
-    description: "How strategic leadership and culture-building transform disengagement into dedication in today's evolving business landscape.",
-    component: BlogPost8
-  },
-  {
-    title: "Building an Inclusive Workplace: How Diversity, Equity, and Inclusion Drive Engagement and Innovation",
-    slug: "/blog/inclusive-workplace-dei-engagement",
-    description: "A guide to making DEI a strategic driver of engagement and innovation, with actionable steps for embedding inclusion throughout your organization.",
-    component: BlogPost9
-  },
-  {
-    title: "Beyond the Bonus: How Strategic Employee Recognition Drives Engagement and Retention",
-    slug: "/blog/strategic-employee-recognition",
-    description: "Why recognition is more than a perk, how to make it impactful, and ways to integrate it into your culture for real results.",
-    component: BlogPost10
-  },
-  {
-    title: "Top Employee Engagement Trends & Predictions for 2025: Navigating the Future of Work",
-    slug: "/blog/employee-engagement-trends-2025",
-    description: "Explore the latest engagement trends, including manager enablement, AI anxiety, personalization, and actionable strategies for the future.",
-    component: BlogPost11
-  },
-  {
-    title: "Designing the Ultimate Employee Experience: A Holistic Approach to Workplace Satisfaction",
-    slug: "/blog/designing-employee-experience",
-    description: "A framework for building holistic employee experience, covering well-being, growth, recognition, tech, and personalization.",
-    component: BlogPost12
-  },
-  {
-    title: "Beyond Balance: Embracing Work-Life Integration for a Thriving Workforce",
-    slug: "/blog/work-life-integration-thriving-workforce",
-    description: "Why work-life integration is the new imperative and how to create harmony with flexibility, well-being, and intentional culture.",
-    component: BlogPost13
-  },
-  {
-    title: "The Right Words: Essential Workplace Messages for Boosting Morale and Connection",
-    slug: "/blog/essential-workplace-messages",
-    description: "A guide to crafting workplace messages for every occasion, boosting morale, recognition, and team connection.",
-    component: BlogPost14
-  },
-  {
-    title: "Fun Facts for Work: Engaging Your Team with Daily Doses of Delight",
-    slug: "/blog/fun-facts-for-work",
-    description: "Non-cringe, practical fun facts and ways to use them for team engagement, morale, and connection throughout the workday.",
-    component: BlogPost15
-  },
-  {
-    title: "Celebrating Small Wins: Simple Ways to Boost Team Morale and Motivation",
-    slug: "/blog/celebrating-small-wins",
-    description: "Why celebrating small wins matters, with practical, non-cringe methods and activities for daily morale boosting.",
-    component: BlogPost16
-  },
-  {
-    title: "Employee Retention Strategies: How to Keep Your Top Talent in 2025",
-    slug: "/blog/employee-retention-strategies-2025",
-    description: "A strategic guide to retaining top performers, with actionable pillars and best practices for HR leaders.",
-    component: BlogPost17
-  },
-  {
-    title: "Team Building: The Ultimate Guide to Unlocking Team Potential & Engagement",
-    slug: "/blog/team-building-ultimate-guide",
-    description: "Comprehensive benefits, activities, and best practices for effective team building in modern organizations.",
-    component: BlogPost18
-  },
-  {
-    title: "Measuring What Matters: Quantifying the ROI of Employee Engagement & Experience",
-    slug: "/blog/roi-employee-engagement",
-    description: "How to measure and communicate the ROI of engagement and experience using actionable metrics and calculation steps.",
-    component: BlogPost19
-  },
-  {
-    title: "The CEO's Playbook: How to Build a High-Performing Culture That Drives Growth & Profit",
-    slug: "/blog/ceo-high-performing-culture",
-    description: "A playbook for founders and CEOs to build culture as a competitive advantage, covering all pillars and ROI.",
-    component: BlogPost20
-  },
-  {
-    title: "Beyond the Trust Fall: Smart Team Building Games That Aren't Cringe (and Actually Work)",
-    slug: "/blog/smart-team-building-games",
-    description: "Purpose-driven, inclusive, non-cringe team building games with practical ideas and implementation tips.",
-    component: BlogPost21
-  },
-  {
-    title: "The Founder's Guide: Unlocking Employee Engagement for Startup Success",
-    slug: "/blog/founders-guide-employee-engagement",
-    description: "Startup-focused strategies for building engagement, retention, and innovation from day one.",
-    component: BlogPost22
-  },
-  {
-    title: "Unlocking Peak Performance: The Psychology of Employee Motivation & How to Inspire Your Team",
-    slug: "/blog/employee-motivation-psychology",
-    description: "Understand intrinsic/extrinsic motivation, with actionable strategies for inspiring and sustaining high performance.",
-    component: BlogPost23
-  },
-  {
-    title: "10 Essential Tools to Measure Employee Engagement: A Data-Driven Approach for HR Leaders",
-    slug: "/blog/employee-engagement-measurement-tools",
-    description: "A toolkit of 10 quantitative and qualitative engagement measurement tools with integration best practices.",
-    component: BlogPost24
-  },
-  {
-    title: "Beyond the Trust Fall: Smart Team Building Games That Aren't Cringe (and Actually Work)",
-    slug: "/blog/smart-team-building-games-2",
-    description: "Second edition: More practical, non-cringe team building games, including creative, competitive, and inclusive options.",
-    component: BlogPost25
-  },
-  {
+    id: 6,
     title: "Employee Retention Strategies: How to Keep Your Top Talent",
-    slug: "/blog/employee-retention-strategies",
-    description: "A strategic guide to retaining top performers, with actionable pillars and best practices for HR leaders.",
-    component: BlogPost26
+    category: "Expert-Insights",
+    thumbnail: Blogimage6,
+    excerpt:
+      "With the cost of replacing a single employee ranging from $30,000 to $45,000 for a mid-level manager, effective employee retention strategies are no longer just a best practice—they are a strategic imperative.",
+    author: "OneThrive",
+    readTime: "5 min read",
+    component: BlogPost6,
+    path: "/blogs/employee-retention-strategies",
   },
   {
-    title: "Boosting Employee Morale: Practical Strategies for a Positive & Productive Workplace",
-    slug: "/blog/boosting-employee-morale",
-    description: "Actionable strategies and quick activities for boosting morale, engagement, and productivity in the workplace.",
-    component: BlogPost27
+    id: 7,
+    title: "The Founder's Guide: Unlocking Employee Engagement for Startup Success",
+    category: 'Expert-Insights',
+    thumbnail: Blogimage7,
+    excerpt: 'For founders, the journey from idea to impactful enterprise is exhilarating, yet fraught with challenges. Amidst product development, fundraising, and market fit, one critical factor often goes unnoticed: employee engagement.',
+    author: 'OneThrive',
+    readTime: '5 min read',
+    component: BlogPost7,
+    path: "/blogs/the-founders-guide",
   },
   {
-    title: "Why Corporate Entertainment is Your Secret Weapon for Employee Satisfaction and Client Loyalty (Edition 2)",
-    slug: "/blog/corporate-entertainment-secret-weapon-2",
-    description: "Second edition: Updated benefits, practical ideas, and best practices for strategic corporate entertainment.",
-    component: BlogPost28
-  }
+    id: 8,
+    title:
+      "The CEO's Playbook: How to Build a High-Performing Culture That Drives Growth & Profit",
+    category: "Leadership",
+    thumbnail: Blogimage8,
+    excerpt:
+      "For founders, CEOs, and senior leaders, the ultimate goal is sustained growth and profitability. The true engine of long-term success lies within: a high-performing culture.",
+    author: "OneThrive",
+    readTime: "5 min read",
+    component: BlogPost8,
+    path: "/blogs/ceo-playbook",
+  },
+  {
+    id: 9,
+    title: 'Fostering a Culture of Well-being: How to Combat Burnout and Boost Morale',
+    category: 'Wellness',
+    thumbnail: Blogimage9,
+    excerpt: 'In today\'s fast-paced work environment, employee burnout is a pervasive and growing challenge. Characterized by chronic stress, exhaustion, cynicism, and reduced efficacy, burnout significantly impacts individual well-being and organizational productivity. The "always-on" culture, coupled with high workloads and tight deadlines, blur the line between work and personal life, leading to increased anxiety and disengagement.',
+    author: 'OneThrive',
+    readTime: '8 min read',
+    component: BlogPost9,
+    path: "/blogs/fostering-culture",
+  },
+  {
+    id: 10,
+    title:
+      "Beyond the Trust Fall: Smart Team Building Games That Aren't Cringe (and Actually Work)",
+    category: "Team Building",
+    thumbnail: Blogimage1,
+    excerpt:
+      'The phrase "team building games" can conjure images of awkward icebreakers. However, effective team building games are powerful tools for transforming a group of individual employees into a cohesive, high-performing unit.',
+    author: "OneThrive",
+    readTime: "5 min read",
+    path: "/blogs/beyond-the-trust-fall",
+  },
 ];

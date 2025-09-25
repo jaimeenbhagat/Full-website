@@ -177,7 +177,7 @@ const Contact = () => {
 
   const inputClasses = (fieldName) => `
     w-full bg-black border font-bold border-neutral-700 rounded-lg px-4 py-3 
-    focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 
+    focus:outline-none focus:ring-2 focus:ring-[#00FFAB] focus:border-[#00FFAB] 
     text-white placeholder-gray-500 transition-colors duration-200
     ${validationErrors[fieldName] ? 'border-red-500 focus:border-red-500 focus:ring-red-400' : ''}
   `;
@@ -426,7 +426,7 @@ const Contact = () => {
                           value={option.value}
                           checked={formData.activityType.includes(option.value)}
                           onChange={() => handleCheckboxChange(option.value)}
-                          className="w-4 h-4 text-green-400 bg-black border-neutral-700 rounded focus:ring-[#00FFAB] focus:ring-2"
+                          className="w-4 h-4 text-[#00FFAB] bg-black border-neutral-700 rounded focus:ring-[#00FFAB] focus:ring-2"
                         />
                         <span className="text-white">{option.label}</span>
                       </label>
