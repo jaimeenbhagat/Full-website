@@ -19,7 +19,7 @@ const blogData = {
       id: 1,
       title: 'Beyond the Trust Fall: Smart Team Building Games That Aren\'t Cringe (and Actually Work)',
       thumbnail: Blogimage1,
-      path: "/blogs/smart-team-building",
+      path: "/blogs/beyond-the-trust-fall",
     },
     {
       id: 2,
@@ -28,10 +28,10 @@ const blogData = {
       path: "/blogs/measuring-what-matters",
     },
     {
-      id: 18,
+      id: 8,
       title: 'Fostering a Culture of Well-being: How to Combat Burnout and Boost Morale',
       thumbnail: Blogimage8,
-      path: "/blogs/combating-burnout",
+      path: "/blogs/fostering-culture",
     },
   ],
   content: [
