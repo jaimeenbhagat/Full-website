@@ -181,7 +181,7 @@ const blogData = {
       type: 'paragraph',
       parts: [
         { type: 'text', content: 'OneThrive\'s Solution: Our ' },
-        { type: 'link', content: 'Offsite & Retreat Planning', href: '/services/offsites-retreats' },
+        { type: 'link', content: 'Offsite & Retreat Planning', href: '/services' },
         { type: 'text', content: ' services are ideal for ' },
         { type: 'bold', content: 'strategic alignment sessions' },
         { type: 'text', content: '. These immersive experiences help leadership teams define and communicate a compelling vision, ensuring every employee understands their role in achieving collective goals. To learn more about how clear purpose drives engagement, read our blog on ' },
@@ -207,7 +207,7 @@ const blogData = {
       type: 'paragraph',
       parts: [
         { type: 'text', content: 'OneThrive\'s Solution: Our ' },
-        { type: 'link', content: 'Creative Workshops', href: '/services/creative-workshops' },
+        { type: 'link', content: 'Creative Workshops', href: '/services' },
         { type: 'text', content: ' develop new skills and foster innovative thinking, directly contributing to professional growth. Our Corporate Entertainment and Sports Events provide platforms for public celebration and ' },
         { type: 'bold', content: 'meaningful recognition' },
         { type: 'text', content: ', transforming apathy into active participation and boosting morale.' }
@@ -255,7 +255,7 @@ const blogData = {
       type: 'paragraph',
       parts: [
         { type: 'text', content: 'OneThrive\'s Solution: Our diverse ' },
-        { type: 'link', content: 'Team-Building Experiences', href: '/services/team-building' },
+        { type: 'link', content: 'Team-Building Experiences', href: '/services' },
         { type: 'text', content: ' are designed to cultivate genuine connections and break down silos. Activities like collaborative problem-solving challenges or "Two Truths and a Lie" foster trust and camaraderie, making it easier for employees to contribute authentically. To learn more about effective team-building games, read our blog ' },
         { type: 'link', content: 'Beyond the Trust Fall: Smart Team Building Games That Aren\'t Cringe', href: '/blogs/smart-team-building-games' },
         { type: 'text', content: '.' }
@@ -279,7 +279,7 @@ const blogData = {
       type: 'paragraph',
       parts: [
         { type: 'text', content: 'OneThrive\'s Solution: Our comprehensive ' },
-        { type: 'link', content: 'Wellness Programs', href: '/services/corporate-wellness' },
+        { type: 'link', content: 'Wellness Programs', href: '/services' },
         { type: 'text', content: ' offer tailored solutions like mindfulness workshops, physical fitness challenges, and financial wellness seminars. These initiatives directly combat burnout and foster overall well-being, leading to a more resilient workforce.' }
       ]
     },

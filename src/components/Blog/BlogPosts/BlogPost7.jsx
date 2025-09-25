@@ -174,7 +174,7 @@ const blogData = {
       parts: [
         { type: 'bold', content: 'OneThrive\'s Impact:' },
         { type: 'text', content: ' Our ' },
-        { type: 'link', content: 'Offsite & Retreat Planning', href: '/services/offsites-retreats' },
+        { type: 'link', content: 'Offsite & Retreat Planning', href: '/services' },
         {
           type: 'text',
           content: ' services can facilitate strategic sessions for founders to refine and communicate their compelling vision to leadership teams, setting a clear path for the entire organization.',
@@ -201,7 +201,7 @@ const blogData = {
       parts: [
         { type: 'bold', content: 'OneThrive\'s Impact:' },
         { type: 'text', content: ' Our ' },
-        { type: 'link', content: 'Team-Building Experiences', href: '/services/team-building' },
+        { type: 'link', content: 'Team-Building Experiences', href: '/services' },
         {
           type: 'text',
           content: ' are designed to break down communication silos and foster psychological safety. Activities like "Two Truths and a Lie" or collaborative problem-solving challenges can create a relaxed environment for authentic interaction and open dialogue.',
@@ -237,7 +237,7 @@ const blogData = {
       parts: [
         { type: 'bold', content: 'OneThrive\'s Impact:' },
         { type: 'text', content: ' Our ' },
-        { type: 'link', content: 'Creative Workshops', href: '/services/creative-workshops' },
+        { type: 'link', content: 'Creative Workshops', href: '/services' },
         {
           type: 'text',
           content: ' can be tailored to develop new skills, foster innovative thinking, and provide hands-on learning experiences directly contributing to professional development. Examples include "Design Thinking Sprints" or "Storytelling & Narrative Workshops."',
@@ -264,9 +264,9 @@ const blogData = {
       parts: [
         { type: 'bold', content: 'OneThrive\'s Impact:' },
         { type: 'text', content: ' Our ' },
-        { type: 'link', content: 'Corporate Entertainment', href: '/services/corporate-entertainment' },
+        { type: 'link', content: 'Corporate Entertainment', href: '/services' },
         { type: 'text', content: ' and ' },
-        { type: 'link', content: 'Corporate Sports Events', href: '/services/corporate-sports-events' },
+        { type: 'link', content: 'Corporate Sports Events', href: '/services' },
         {
           type: 'text',
           content: ' offer excellent platforms for public celebration of team and individual successes. Imagine a "Founder\'s Choice Award" presented at a lively corporate event or celebrating a project completion during a company sports day.',
@@ -293,7 +293,7 @@ const blogData = {
       parts: [
         { type: 'bold', content: 'OneThrive\'s Impact:' },
         { type: 'text', content: ' Our comprehensive ' },
-        { type: 'link', content: 'Wellness Programs', href: '/services/corporate-wellness' },
+        { type: 'link', content: 'Wellness Programs', href: '/services' },
         {
           type: 'text',
           content: ' offer tailored solutions like mindfulness workshops, physical fitness challenges (e.g., quick desk stretches), and stress management techniques. These initiatives directly combat burnout and help employees achieve better work-life integration, fostering overall well-being.',

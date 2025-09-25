@@ -462,7 +462,7 @@ const blogData = {
         {
           type: 'link',
           content: 'wellness solutions',
-          href: '/services/corporate-wellness',
+          href: '/services',
         },
         {
           type: 'text',

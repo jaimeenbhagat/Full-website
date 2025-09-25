@@ -162,7 +162,7 @@ const blogData = {
       parts: [
         { type: 'bold', content: 'OneThrive\'s Connection:' },
         { type: 'text', content: ' Our ' },
-        { type: 'link', content: 'Team-Building Experiences', href: '/services/team-building' },
+        { type: 'link', content: 'Team-Building Experiences', href: '/services' },
         {
           type: 'text',
           content: ' and Corporate Entertainment foster stronger connections and morale, directly impacting retention by creating a more positive and supportive workplace.',
@@ -199,9 +199,9 @@ const blogData = {
       parts: [
         { type: 'bold', content: 'OneThrive\'s Connection:' },
         { type: 'text', content: ' Our ' },
-        { type: 'link', content: 'Wellness Programs', href: '/services/corporate-wellness' },
+        { type: 'link', content: 'Wellness Programs', href: '/services' },
         { type: 'text', content: ' reduce burnout and improve focus, while ' },
-        { type: 'link', content: 'Creative Workshops', href: '/services/creative-workshops' },
+        { type: 'link', content: 'Creative Workshops', href: '/services' },
         { type: 'text', content: ' enhance problem-solving and innovation, all contributing to higher productivity.' },
       ],
     },
@@ -235,7 +235,7 @@ const blogData = {
       parts: [
         { type: 'bold', content: 'OneThrive\'s Connection:' },
         { type: 'text', content: ' Our Wellness Programs promote physical and mental health, directly reducing stress and illness-related absences. Our ' },
-        { type: 'link', content: 'Corporate Sports Events', href: '/services/sports-events' },
+        { type: 'link', content: 'Corporate Sports Events', href: '/services' },
         { type: 'text', content: ' encourage physical activity, further boosting overall health and attendance.' },
       ],
     },
@@ -269,7 +269,7 @@ const blogData = {
       parts: [
         { type: 'bold', content: 'OneThrive\'s Connection:' },
         { type: 'text', content: ' Our services, by boosting internal morale and connection, indirectly empower employees to deliver exceptional customer experiences. For example, a unified, engaged team from an ' },
-        { type: 'link', content: 'Offsite & Retreat', href: '/services/offsites-retreats' },
+        { type: 'link', content: 'Offsite & Retreat', href: '/services' },
         { type: 'text', content: ' is better equipped to serve clients.' },
       ],
     },

@@ -186,7 +186,7 @@ const blogData = {
       parts: [
         { type: 'bold', content: 'Actionable Tip:' },
         { type: 'text', content: ' Integrate new hires through fun, collaborative ' },
-        { type: 'link', content: 'team-building activities', href: '/services/team-building' },
+        { type: 'link', content: 'team-building activities', href: '/services' },
         { type: 'text', content: ', fostering immediate connection. Ensure every touchpoint, from initial welcome to ongoing engagement, is curated for satisfaction.' }
       ]
     },
@@ -209,7 +209,7 @@ const blogData = {
       parts: [
         { type: 'bold', content: 'Actionable Tip:' },
         { type: 'text', content: ' Utilize ' },
-        { type: 'link', content: 'corporate entertainment', href: '/services/corporate-entertainment' },
+        { type: 'link', content: 'corporate entertainment', href: '/services' },
         { type: 'text', content: ' or sports events as excellent platforms for public celebration of team and individual successes. Design offsites with dedicated segments for recognizing outstanding contributions, creating memorable moments of appreciation.' }
       ]
     },
@@ -232,7 +232,7 @@ const blogData = {
       parts: [
         { type: 'bold', content: 'Actionable Tip:' },
         { type: 'text', content: ' Implement ' },
-        { type: 'link', content: 'creative workshops', href: '/services/creative-workshops' },
+        { type: 'link', content: 'creative workshops', href: '/services' },
         { type: 'text', content: ' tailored to develop new skills, foster innovative thinking, and provide hands-on learning experiences. Empower managers through leadership offsites to champion growth and career planning within their teams.' }
       ]
     },
@@ -253,7 +253,7 @@ const blogData = {
       parts: [
         { type: 'bold', content: 'Actionable Tip:' },
         { type: 'text', content: ' Offer comprehensive ' },
-        { type: 'link', content: 'wellness programs', href: '/services/corporate-wellness' },
+        { type: 'link', content: 'wellness programs', href: '/services' },
         { type: 'text', content: ' with tailored solutions like mindfulness workshops, physical fitness challenges, and financial wellness seminars. These initiatives directly combat burnout and foster overall well-being, aligning with employee expectations for holistic support.' }
       ]
     },
