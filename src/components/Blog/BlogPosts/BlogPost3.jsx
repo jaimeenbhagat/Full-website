@@ -19,7 +19,7 @@ const blogData = {
       id: 8,
       title: 'The CEO\'s Playbook: How to Build a High-Performing Culture That Drives Growth & Profit',
       thumbnail: Blogimage8,
-      path: "/blogs/ceos-playbook",
+      path: "/blogs/ceo-playbook",
     },
     {
       id: 4,
