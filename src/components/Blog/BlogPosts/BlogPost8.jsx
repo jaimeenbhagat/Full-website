@@ -843,7 +843,7 @@ const BlogPost8 = () => {
             {/* Enhanced Article Header */}
             <header className="mb-12 sm:mb-16">
               <div className="relative">
-                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-tight mb-6 sm:mb-8 bg-gradient-to-r from-white to-[#00FFAB] bg-clip-text text-transparent">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-tight mb-6 sm:mb-8 bg-white bg-clip-text text-transparent">
                   {blogData.title}
                 </h1>
                 <div className="absolute -top-2 sm:-top-4 -left-2 sm:-left-4 w-8 h-8 sm:w-12 sm:h-12 bg-[#00FFAB]/10 rounded-full blur-xl"></div>

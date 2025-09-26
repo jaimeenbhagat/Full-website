@@ -6,7 +6,6 @@ import Blogimage7 from "../../../assets/Blogs/Blog7.webp";
 import { useNavigate } from "react-router-dom";
 import Blog from "../../../pages/Blog";
 
-
 // Content extracted and structured from the provided PDF
 const blogData = {
   id: 1,
@@ -684,10 +683,8 @@ const ContentBlock = ({ block }) => {
 const BlogPost1 = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [activeSection, setActiveSection] = useState("");
-  const [showShareSection, setShowShareSection] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const headingsRef = useRef([]);
-  const relatedPostsRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -697,17 +694,6 @@ const BlogPost1 = () => {
         document.documentElement.clientHeight;
       const progress = (window.scrollY / totalHeight) * 100;
       setScrollProgress(progress);
-
-      // Check if we've reached the Related Posts section
-      const relatedPostsElement = relatedPostsRef.current;
-      if (relatedPostsElement) {
-        const relatedPostsRect = relatedPostsElement.getBoundingClientRect();
-        const viewportHeight = window.innerHeight;
-
-        // Show share section when Related Posts section comes into view
-        const shouldShowShare = relatedPostsRect.top <= viewportHeight * 0.8;
-        setShowShareSection(shouldShowShare);
-      }
 
       // Update active section
       const headings = headingsRef.current;
@@ -770,14 +756,45 @@ const BlogPost1 = () => {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className={`group bg-black/80 backdrop-blur-sm p-3 sm:p-4 rounded-full border border-[#00FFAB]/30 hover:border-[#00FFAB] hover:bg-[#00FFAB]/10 transition-all duration-300 hover:shadow-[0_0_20px_rgba(0,255,171,0.3)] hover:scale-110 ${className}`}
+      className={`group bg-black/80 backdrop-blur-sm p-2.5 rounded-full border border-[#00FFAB]/30 hover:border-[#00FFAB] hover:bg-[#00FFAB]/10 transition-all duration-300 hover:shadow-[0_0_20px_rgba(0,255,171,0.3)] hover:scale-110 ${className}`}
       aria-label={label}
     >
-      <div className="w-5 h-5 sm:w-6 sm:h-6 text-white group-hover:text-[#00FFAB] transition-colors duration-300">
+      <div className="w-4 h-4 text-white group-hover:text-[#00FFAB] transition-colors duration-300">
         {children}
       </div>
     </a>
   );
+
+  // Thin vertical share bar for laptops/desktops only (no mobile changes)
+  const ThinShareItem = ({ href, onClick, label, children }) => {
+    const classes =
+      "flex items-center justify-center w-9 h-9 rounded-md bg-black/80 border border-[#00FFAB]/30 hover:border-[#00FFAB] hover:bg-[#00FFAB]/10 transition-all duration-300";
+    if (href) {
+      return (
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={label}
+          className={classes}
+          title={label}
+        >
+          {children}
+        </a>
+      );
+    }
+    return (
+      <button
+        onClick={onClick}
+        aria-label={label}
+        className={classes}
+        title={label}
+        type="button"
+      >
+        {children}
+      </button>
+    );
+  };
 
   return (
     <div className="font-sans bg-black min-h-screen text-white relative mt-4 sm:mt-8">
@@ -853,36 +870,6 @@ const BlogPost1 = () => {
         ></div>
       </div>
 
-      {/* Mobile Navigation Toggle
-      <button
-        onClick={() => setShowMobileMenu(!showMobileMenu)}
-        className="fixed top-6 right-6 z-50 lg:hidden bg-black/90 backdrop-blur-sm p-3 rounded-full border border-[#00FFAB]/30 hover:border-[#00FFAB] transition-all duration-300 hover:shadow-[0_0_20px_rgba(0,255,171,0.3)]"
-        aria-label="Toggle menu"
-      >
-        <svg
-          className="w-6 h-6 text-white"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          {showMobileMenu ? (
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M6 18L18 6M6 6l12 12"
-            />
-          ) : (
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 6h16M4 12h16M4 18h16"
-            />
-          )}
-        </svg>
-      </button> */}
-
       {/* Mobile Overlay */}
       {showMobileMenu && (
         <div
@@ -892,7 +879,11 @@ const BlogPost1 = () => {
       )}
 
       {/* Mobile Menu */}
-      <div className={`mobile-menu fixed left-0 top-0 h-full w-80 bg-black/95 backdrop-blur-xl z-40 lg:hidden border-r border-[#00FFAB]/30 ${showMobileMenu ? 'open' : ''}`}>
+      <div
+        className={`mobile-menu fixed left-0 top-0 h-full w-80 bg-black/95 backdrop-blur-xl z-40 lg:hidden border-r border-[#00FFAB]/30 ${
+          showMobileMenu ? "open" : ""
+        }`}
+      >
         <div className="p-6 pt-16">
           {/* Mobile Table of Contents */}
           <div className="mb-8">
@@ -927,7 +918,7 @@ const BlogPost1 = () => {
             </ul>
           </div>
 
-          {/* Mobile Share Section */}
+          {/* Mobile Share Section (unchanged) */}
           <div>
             <h4 className="text-xl font-bold mb-4 text-[#00FFAB] flex items-center">
               <svg
@@ -991,6 +982,85 @@ const BlogPost1 = () => {
         </div>
       </div>
 
+      {/* Thin vertical share rail on the left (DESKTOP ONLY) */}
+      <div className="hidden lg:flex fixed left-4 top-1/2 -translate-y-1/2 z-40 flex-col items-center space-y-3">
+        {/* LinkedIn */}
+        <ThinShareItem
+          href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(
+            "[DYNAMIC_URL]"
+          )}`}
+          label="Share on LinkedIn"
+        >
+          {/* LinkedIn official logo */}
+          <svg
+            viewBox="0 0 24 24"
+            width="18"
+            height="18"
+            aria-hidden="true"
+            className="text-white"
+            fill="currentColor"
+          >
+            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.854 0-2.136 1.447-2.136 2.944v5.662H9.351V9h3.414v1.561h.049c.476-.9 1.637-1.852 3.37-1.852 3.604 0 4.268 2.372 4.268 5.455v6.288zM5.337 7.433a2.062 2.062 0 110-4.123 2.062 2.062 0 010 4.123zM6.999 20.452H3.671V9h3.328v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.226.792 24 1.771 24h20.451C23.2 24 24 23.226 24 22.271V1.729C24 .774 23.2 0 22.225 0z" />
+          </svg>
+        </ThinShareItem>
+
+        {/* X (formerly Twitter) */}
+        <ThinShareItem
+          href={`https://x.com/intent/tweet?url=${encodeURIComponent(
+            "[DYNAMIC_URL]"
+          )}&text=${encodeURIComponent(blogData.title)}`}
+          label="Share on X"
+        >
+          {/* X logo */}
+          <svg
+            viewBox="0 0 24 24"
+            width="18"
+            height="18"
+            aria-hidden="true"
+            className="text-white"
+            fill="currentColor"
+          >
+            <path d="M18.244 2H21.5l-7.59 8.668L23 22h-6.59l-5.16-6.508L5.2 22H2l8.12-9.277L1 2h6.75l4.67 5.938L18.244 2zm-1.155 18h1.605L7.01 4H5.29l11.8 16z" />
+          </svg>
+        </ThinShareItem>
+
+        {/* WhatsApp */}
+        <ThinShareItem
+          href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
+            blogData.title + " [DYNAMIC_URL]"
+          )}`}
+          label="Share on WhatsApp"
+        >
+          {/* WhatsApp official logo */}
+          <svg
+            viewBox="0 0 32 32"
+            width="18"
+            height="18"
+            aria-hidden="true"
+            className="text-white"
+            fill="currentColor"
+          >
+            <path d="M19.11 17.19c-.3-.15-1.79-.88-2.07-.98-.28-.1-.48-.15-.68.15-.2.3-.78.98-.95 1.18-.17.2-.35.22-.65.07-.3-.15-1.27-.47-2.42-1.51-.89-.79-1.5-1.77-1.67-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.68-1.64-.93-2.25-.24-.58-.49-.5-.68-.51-.18-.01-.37-.01-.57-.01-.2 0-.52.07-.79.37-.27.3-1.05 1.02-1.05 2.49 0 1.47 1.08 2.89 1.23 3.09.15.2 2.13 3.25 5.16 4.55.72.31 1.29.49 1.73.63.73.23 1.39.2 1.92.12.59-.09 1.79-.73 2.05-1.43.25-.7.25-1.29.17-1.43-.08-.14-.27-.22-.57-.37z" />
+            <path d="M26.7 5.3C23.9 2.5 20.2 1 16.2 1 8.5 1 2.3 7.2 2.3 14.9c0 2.41.63 4.77 1.83 6.86L2 30.8l9.21-2.01c1.99 1.09 4.23 1.66 6.5 1.66 7.7 0 13.9-6.2 13.9-13.9 0-3.99-1.55-7.7-4.41-10.55zM16.71 28.2c-2.07 0-4.06-.55-5.81-1.6l-.42-.25-5.46 1.2 1.16-5.33-.27-.44c-1.13-1.86-1.73-3.98-1.73-6.13 0-6.62 5.38-12 12-12 3.21 0 6.23 1.25 8.5 3.51 2.27 2.27 3.51 5.29 3.51 8.5-.01 6.63-5.39 12-12.07 12z" />
+          </svg>
+        </ThinShareItem>
+
+        {/* Copy to clipboard (clipboard icon) */}
+        <ThinShareItem onClick={handleCopyLink} label="Copy link">
+          <svg
+            viewBox="0 0 24 24"
+            width="18"
+            height="18"
+            aria-hidden="true"
+            className="text-white"
+            fill="currentColor"
+          >
+            <path d="M16 4h-1.18A3 3 0 0012 2a3 3 0 00-2.82 2H8a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V6a2 2 0 00-2-2zm-4-1a1 1 0 011 1h-2a1 1 0 011-1zm4 15H8V6h8v12z" />
+            <path d="M6 8H5a2 2 0 00-2 2v10a2 2 0 002 2h9a2 2 0 002-2v-1H6V8z" opacity=".6" />
+          </svg>
+        </ThinShareItem>
+      </div>
+
       <main className="container mx-auto px-4 sm:px-6 lg:px-4 py-8 sm:py-12 md:py-16 lg:py-24 relative z-10 mt-12 sm:mt-0">
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
           {/* Main Article Content */}
@@ -1003,7 +1073,11 @@ const BlogPost1 = () => {
               >
                 Blog
               </span>
-              <svg className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <svg
+                className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
                 <path
                   fillRule="evenodd"
                   d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
@@ -1013,7 +1087,11 @@ const BlogPost1 = () => {
               <span className="hover:text-[#00FFAB] transition-colors duration-200 cursor-pointer whitespace-nowrap">
                 {blogData.category}
               </span>
-              <svg className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <svg
+                className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
                 <path
                   fillRule="evenodd"
                   d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
@@ -1028,7 +1106,7 @@ const BlogPost1 = () => {
             {/* Enhanced Article Header */}
             <header className="mb-12 sm:mb-16">
               <div className="relative">
-                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-tight mb-6 sm:mb-8 bg-gradient-to-r from-white to-[#00FFAB] bg-clip-text text-transparent">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-tight mb-6 sm:mb-8 bg-white bg-clip-text text-transparent">
                   {blogData.title}
                 </h1>
                 <div className="absolute -top-2 sm:-top-4 -left-2 sm:-left-4 w-8 h-8 sm:w-12 sm:h-12 bg-[#00FFAB]/10 rounded-full blur-xl"></div>
@@ -1080,7 +1158,7 @@ const BlogPost1 = () => {
               ))}
             </section>
 
-            {/* Enhanced Social Share Buttons (Mobile/Bottom) */}
+            {/* Enhanced Social Share Buttons (Mobile/Bottom) - UNCHANGED and hidden on lg */}
             <div className="flex flex-wrap justify-center gap-3 sm:gap-4 my-12 sm:my-16 lg:hidden">
               <SocialButton
                 href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(
@@ -1128,7 +1206,7 @@ const BlogPost1 = () => {
             </div>
 
             {/* Related Posts Section */}
-            <section ref={relatedPostsRef} className="my-16 sm:my-20">
+            <section className="my-16 sm:my-20">
               <div className="text-center mb-8 sm:mb-12">
                 <h3 className="text-3xl sm:text-4xl font-black mb-4 bg-white bg-clip-text text-transparent">
                   Related Posts
@@ -1181,20 +1259,14 @@ const BlogPost1 = () => {
             </section>
           </article>
 
-          {/* Sidebar with Sequential Display */}
-          <div className="lg:w-1/4 lg:flex flex-col hidden">
-            {/* Table of Contents - Shows until Related Posts */}
-            <div
-              className={`sticky top-24 transition-all duration-500 ${
-                showShareSection
-                  ? "opacity-0 pointer-events-none transform -translate-y-4"
-                  : "opacity-100 pointer-events-auto transform translate-y-0"
-              }`}
-            >
-              <div className="bg-gradient-to-br from-black to-black/90 backdrop-blur-xl p-5 rounded-3xl border border-[#00FFAB]/30 shadow-2xl">
-                <h4 className="text-2xl font-bold mb-2 text-[#00FFAB] flex items-center">
+          {/* Sidebar - Always visible on lg; only Table of Contents remains */}
+          <div className="lg:w-1/4 lg:flex flex-col hidden space-y-6">
+            <div className="sticky top-24">
+              {/* Table of Contents */}
+              <div className="bg-gradient-to-br from-black to-black/90 backdrop-blur-xl p-4 rounded-2xl border border-[#00FFAB]/30 shadow-2xl mb-6">
+                <h4 className="text-lg font-bold mb-3 text-[#00FFAB] flex items-center">
                   <svg
-                    className="w-6 h-6 mr-3"
+                    className="w-4 h-4 mr-2"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
@@ -1202,14 +1274,14 @@ const BlogPost1 = () => {
                   </svg>
                   Table of Contents
                 </h4>
-                <ul className="space-y-3">
+                <ul className="space-y-2">
                   {blogData.content
                     .filter((block) => block.type === "subheading")
                     .map((heading) => (
                       <li key={heading.id}>
                         <a
                           href={`#${heading.id}`}
-                          className={`block text-[12px] px-4 py-2 rounded-lg transition-all duration-300 border-l-2 ${
+                          className={`block text-xs px-3 py-2 rounded-lg transition-all duration-300 border-l-2 ${
                             activeSection === heading.id
                               ? "text-[#00FFAB] border-[#00FFAB] bg-[#00FFAB]/10 font-semibold"
                               : "text-white border-transparent hover:text-[#00FFAB] hover:border-[#00FFAB]/50 hover:bg-[#00FFAB]/5"
@@ -1221,76 +1293,8 @@ const BlogPost1 = () => {
                     ))}
                 </ul>
               </div>
-            </div>
 
-            {/* Share Section - Shows when Related Posts appears */}
-            <div
-              className={`sticky top-24 transition-all duration-500 ${
-                showShareSection
-                  ? "opacity-100 pointer-events-auto transform translate-y-0"
-                  : "opacity-0 pointer-events-none transform translate-y-4"
-              }`}
-              style={{
-                position: showShareSection ? "sticky" : "absolute",
-              }}
-            >
-              <div className="bg-gradient-to-br from-black to-black/90 backdrop-blur-xl p-8 rounded-3xl border border-[#00FFAB]/30 shadow-2xl flex flex-col items-center">
-                <h4 className="text-2xl font-bold mb-6 text-[#00FFAB] flex items-center">
-                  <svg
-                    className="w-6 h-6 mr-3"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
-                  </svg>
-                  Share
-                </h4>
-                <div className="flex flex-col space-y-4">
-                  <SocialButton
-                    href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(
-                      "[DYNAMIC_URL]"
-                    )}`}
-                    label="Share on LinkedIn"
-                  >
-                    <svg fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.763s.784-1.762 1.75-1.762 1.75.79 1.75 1.762-.783 1.763-1.75 1.763zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
-                    </svg>
-                  </SocialButton>
-                  <SocialButton
-                    href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(
-                      "[DYNAMIC_URL]"
-                    )}&text=${encodeURIComponent(blogData.title)}`}
-                    label="Share on Twitter"
-                  >
-                    <svg fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.36 0-6.082 2.72-6.082 6.082 0 .476.056.938.164 1.378-5.056-.255-9.52-2.67-12.516-6.346-.525.908-.827 1.966-.827 3.101 0 2.105 1.071 3.965 2.693 5.064-.99.03-1.918-.304-2.727-.751v.079c0 2.967 2.114 5.448 4.912 6.012-.472.129-.971.196-1.485.196-.363 0-.71.035-1.05.099.78 2.427 3.031 4.195 5.764 4.248-2.083 1.631-4.723 2.585-7.589 2.585-.494 0-.978-.029-1.455-.084 2.684 1.742 5.867 2.76 9.284 2.76 11.13 0 17.221-9.227 17.221-17.221 0-.263-.008-.526-.017-.788.943-.679 1.765-1.533 2.417-2.529z" />
-                    </svg>
-                  </SocialButton>
-                  <SocialButton
-                    href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
-                      blogData.title + " [DYNAMIC_URL]"
-                    )}`}
-                    label="Share on WhatsApp"
-                  >
-                    <svg fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12.04 2.05c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.42 1.34 4.88l-1.39 5.04 5.23-1.37c1.4-.76 2.92-1.16 4.47-1.16 5.46 0 9.91-4.45 9.91-9.91s-4.45-9.91-9.91-9.91zm0 18.06c-1.46 0-2.84-.4-4.06-1.16l-3.52.92.93-3.38c-.76-1.29-1.16-2.75-1.16-4.24 0-4.48 3.65-8.12 8.12-8.12s8.12 3.65 8.12 8.12-3.64 8.12-8.12 8.12zm4.38-5.91c-.24-.12-.86-.42-.99-.47-.14-.06-.24-.09-.34.09-.09.18-.34.47-.42.56-.09.09-.17.1-.31.06-.14-.04-.59-.22-1.12-.69-.42-.37-.7-.84-.79-.99-.09-.15-.01-.15.06-.15s.16-.01.24-.01c.08-.01.14-.02.22-.05s.21-.05.32-.12c.1-.06.18-.17.24-.26s.08-.18.04-.34c-.04-.14-.34-.82-.47-1.1s-.26-.22-.34-.23-.17-.02-.24-.02h-.34c-.11-.01-.29-.02-.59.22-.29.23-1.12 1.09-1.12 2.65 0 1.55 1.15 3.07 1.31 3.28 0 0 0 0 0 0.15.21.29.35.59.45.29.1.59.15.89.15.42 0 1.25-.39 1.43-.51.18-.12.42-.19 1.12-.59.7-.42 1.16-.95 1.34-1.22.18-.28.18-.28.1-.41z" />
-                    </svg>
-                  </SocialButton>
-                  <button
-                    onClick={handleCopyLink}
-                    className="group bg-black/80 backdrop-blur-sm p-4 rounded-full border border-[#00FFAB]/30 hover:border-[#00FFAB] hover:bg-[#00FFAB]/10 transition-all duration-300 hover:shadow-[0_0_20px_rgba(0,255,171,0.3)] hover:scale-110"
-                    aria-label="Copy link"
-                  >
-                    <svg
-                      className="w-6 h-6 text-white group-hover:text-[#00FFAB] transition-colors duration-300"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M16 1h-12c-1.104 0-2 .896-2 2v14h2v-14c0-.551.448-1 1-1h12v-2zm-2 4h-10c-1.104 0-2 .896-2 2v14c0 1.104.896 2 2 2h10c1.104 0 2-.896 2-2v-14c0-1.104-.896-2-2-2zm0 16h-10v-14h10v14z" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
+              {/* Share Section was here on right side - REMOVED as requested */}
             </div>
           </div>
         </div>

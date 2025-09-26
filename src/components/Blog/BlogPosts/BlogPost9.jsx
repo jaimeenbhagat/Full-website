@@ -938,7 +938,7 @@ const BlogPost9 = () => {
             {/* Enhanced Article Header */}
             <header className="mb-12 sm:mb-16">
               <div className="relative">
-                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-tight mb-6 sm:mb-8 bg-gradient-to-r from-white to-[#00FFAB] bg-clip-text text-transparent">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-tight mb-6 sm:mb-8 bg-white bg-clip-text text-transparent">
                   {blogData.title}
                 </h1>
                 <div className="absolute -top-2 sm:-top-4 -left-2 sm:-left-4 w-8 h-8 sm:w-12 sm:h-12 bg-[#00FFAB]/10 rounded-full blur-xl"></div>
@@ -1093,20 +1093,20 @@ const BlogPost9 = () => {
           <div className="lg:w-1/4 lg:flex flex-col hidden">
             {/* Table of Contents - Shows until Related Posts */}
             <div 
-              className={`sticky top-24 transition-all duration-500 ${
+              className={`sticky top-22 transition-all duration-500 ${
                 showShareSection 
                   ? 'opacity-0 pointer-events-none transform -translate-y-4' 
                   : 'opacity-100 pointer-events-auto transform translate-y-0'
               }`}
             >
-              <div className="bg-gradient-to-br from-black to-black/90 backdrop-blur-xl p-5 rounded-3xl border border-[#00FFAB]/30 shadow-2xl">
+              <div className="bg-gradient-to-br from-black to-black/90 backdrop-blur-xl p-3 rounded-3xl border border-[#00FFAB]/30 shadow-2xl">
                 <h4 className="text-2xl font-bold mb-2 text-[#00FFAB] flex items-center">
                   <svg className="w-6 h-6 mr-3" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zM3 16a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" />
                   </svg>
                   Table of Contents
                 </h4>
-                <ul className="space-y-3">
+                <ul className="">
                   {blogData.content
                     .filter((block) => block.type === 'subheading')
                     .map((heading) => (
